@@ -24,8 +24,8 @@ jobs:
         run: |
           cd frontend
           yarn install
-          yarn lint
-          yarn test
+          yarn run lint
+          yarn run test
   build:
     runs-on: ubuntu-latest
     steps:
