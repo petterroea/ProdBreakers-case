@@ -1,0 +1,44 @@
+name: CI
+on: 
+  push:
+    branches:
+      - '**'
+    paths:
+      - 'frontend/**'
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.ref }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@master
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install and Test
+        run: |
+          cd frontend
+          yarn install
+          yarn lint
+          yarn test
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Use Node.js 12
+        uses: actions/setup-node@master
+        with:
+          node-version: '12'
+      - name: build
+        run: |
+          cd frontend
+          yarn install
+          yarn build
