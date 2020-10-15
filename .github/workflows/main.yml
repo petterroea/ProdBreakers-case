@@ -23,9 +23,9 @@ jobs:
       - name: Install and Test
         run: |
           cd frontend
-          npm install
-          npm run-script lint
-          npm run-script test
+          yarn install
+          yarn run lint
+          yarn run test
   build:
     runs-on: ubuntu-latest
     steps:
@@ -40,5 +40,5 @@ jobs:
       - name: build
         run: |
           cd frontend
-          npm install
-          npm build
+          yarn install
+          yarn build
