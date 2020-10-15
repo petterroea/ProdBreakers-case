@@ -22,6 +22,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install and Test
         run: |
+          cd frontend
           npm install
           npm run-script lint
           npm run-script test
@@ -38,5 +39,6 @@ jobs:
           node-version: '12'
       - name: build
         run: |
+          cd frontend
           npm install
           npm build
