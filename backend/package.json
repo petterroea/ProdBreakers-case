@@ -1,0 +1,29 @@
+{
+  "name": "ProdBreakers",
+  "version": "1.0.0",
+  "description": "yolo hahaha",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "typeorm": "^0.2.28"
+  },
+  "scripts": {
+    "build": "tsc --strictNullChecks",
+    "dev": "ts-node-dev --respawn ./src/index.ts",
+    "lint": "tslint --project tsconfig.json -c tslint.commit.json --fix",
+    "test": "jest --runInBand --forceExit",
+    "prettify": "prettier **.ts --write",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.9",
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "@typescript-eslint/parser": "^4.4.1",
+    "jest": "^26.5.3",
+    "prettier": "^2.1.2",
+    "ts-jest": "^26.4.1",
+    "ts-node-dev": "^1.0.0-pre.65",
+    "typescript": "^4.0.3"
+  }
+}
