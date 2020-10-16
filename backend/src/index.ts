@@ -1,17 +1,12 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const createError = require('http-errors');
-const http = require('http');
+import express from 'express';
+import cors from 'cors';
+import createError from 'http-errors';
+import http from 'http';
 
 const user = require('./routes/userRouter')
 
 const app = express();
 app.use(cors());
-
-
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'pug');
 
 app.use('/user', user);
 
