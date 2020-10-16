@@ -3,12 +3,12 @@ import cors from 'cors';
 import createError from 'http-errors';
 import http from 'http';
 
-const user = require('./routes/userRouter')
+import userRouter from './routes/userRouter';
 
 const app = express();
 app.use(cors());
 
-app.use('/user', user);
+app.use('/user', userRouter);
 
 app.use((_req, _res, next) => {
   next(createError(404));

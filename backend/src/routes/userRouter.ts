@@ -8,4 +8,4 @@ userRouter.get('/', (_req, res) => {
   res.send('Hi');
 });
 
-module.exports = userRouter;
+export default userRouter;
