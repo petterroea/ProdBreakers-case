@@ -35,13 +35,14 @@ services:
       - 3739:8080
   db:
     image: postgres:12
-    restart: always
     ports:
       - 5432
     environment:
       POSTGRES_DATABASE: "prodbreakers"
       POSTGRES_PASSWORD: MannCoTabetai
       POSTGRES_USER: prodbreakers
+    volumes:
+      - ./db_setup.sh:/docker-entrypoint-initdb.d/init-uuid.sh
     logging:
       options:
        max-size: "1g"
