@@ -1,0 +1,23 @@
+{
+  "name": "ProdBreakersStream",
+  "version": "1.0.0",
+  "description": "yolohahaha",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "node-dev": "^6.2.0",
+    "node-media-server": "^2.2.4"
+  },
+  "scripts": {
+    "build": "tsc --strictNullChecks",
+    "dev": "node-dev --respawn ./src/index.js",
+    "lint": "tslint --project tsconfig.json -c tslint.commit.json --fix",
+    "test": "jest --runInBand --forceExit",
+    "prettify": "prettier **.ts --write",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js"
+  },
+  "devDependencies": {
+    "jest": "^26.5.3",
+    "prettier": "^2.1.2"
+  }
+}
