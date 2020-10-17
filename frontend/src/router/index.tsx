@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, Router, Redirect } from 'react-router-dom';
-import styled from 'styled-compoents';
+import styled from 'styled-components';
 
 // History
 import { historyObject } from './historyObject';
