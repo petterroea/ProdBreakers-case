@@ -69,6 +69,7 @@ const Input = styled.input`
 
 const VodList = styled.div`
     width: 80%;
+    overflow: auto;
 `;
 const VodFlex = styled.div`
     display: flex;
@@ -78,7 +79,7 @@ const VodEntry = styled.div`
     padding: 1em;
     border: 1px solid #ddd;
     overflow-x: auto;
-    width: 10em;
+    min-width: 10em;
     :hover {
         background-color: #eee;
         cursor: pointer;
@@ -107,6 +108,11 @@ export const VideoPlayerPage: React.FC = () => {
     const [vodList, setVodList] = React.useState([] as Vod[]);
 
     const [socket, setSocket] = React.useState({} as typeof Socket);
+
+    //Stream state
+    const [streamEnded, setStreamEnded] = React.useState(false);
+    const [streamUrl, setStreamUrl] = React.useState(null as null | string);
+    const [vodUrl, setVodUrl] = React.useState(null as null | string);
 
     const validationSchema = React.useMemo(
         () =>
@@ -151,13 +157,17 @@ export const VideoPlayerPage: React.FC = () => {
             });
 
             socket.on('streamStart', (data: any) => {
-                console.log('Stream start');
-                console.log(data);
+                console.log(`Stream start: ${JSON.stringify(data)}`);
+                const streamUrl = `rtmp://localhost:1935${data.path}`;
+                //const streamUrl = `localhost:8000${data.path}.flv`
+                console.log(`Setting stream url: ${streamUrl}`);
+                setStreamUrl(streamUrl);
             });
 
             socket.on('streamEnd', (data: any) => {
                 console.log('Stream end');
                 console.log(data);
+                setStreamEnded(true);
             });
 
             setLoading(false);
@@ -185,7 +195,13 @@ export const VideoPlayerPage: React.FC = () => {
         <Wrapper>
             <h2>{lectureObj.name}</h2>
             <WrapperTwo>
-                <VideoPlayer uuid={uuid} ended={false} stream={null} vod={null} chats={chatMessages}></VideoPlayer>
+                <VideoPlayer
+                    uuid={uuid}
+                    ended={streamEnded}
+                    stream={streamUrl}
+                    vod={vodUrl}
+                    chats={chatMessages}
+                ></VideoPlayer>
                 <CommentField key={1}>
                     <CommentHeader>Comments</CommentHeader>
                     <CommentBody>
@@ -205,7 +221,11 @@ export const VideoPlayerPage: React.FC = () => {
                     <h1>Vods</h1>
                     <VodFlex>
                         {vodList.map((vodObj) => {
-                            return <VodEntry key={vodObj.fileName}>{vodObj.fileName}</VodEntry>;
+                            return (
+                                <VodEntry key={vodObj.fileName} onClick={() => setVodUrl(vodObj.path)}>
+                                    {vodObj.fileName}
+                                </VodEntry>
+                            );
                         })}
                     </VodFlex>
                 </VodList>
