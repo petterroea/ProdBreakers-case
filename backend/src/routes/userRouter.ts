@@ -2,6 +2,8 @@ import { Router } from 'express';
 
 import { getUserRepository } from '../database';
 import { User } from '../entities/user';
+import loginRouter from './user/loginRouter';
+import registerRouter from './user/registerRouter';
 
 const userRouter = Router();
 
@@ -23,5 +25,9 @@ userRouter.get('/:uuid', async (req, res) => {
   user.hashedPassword = undefined;
   res.json(user);
 });
+
+userRouter.use('/login', loginRouter);
+
+userRouter.use('/register', registerRouter);
 
 export default userRouter;
