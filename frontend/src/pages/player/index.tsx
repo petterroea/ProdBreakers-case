@@ -9,8 +9,11 @@ import { UnlockAlt } from '@styled-icons/fa-solid/UnlockAlt';
 import { historyObject as history } from '../../router/historyObject';
 
 import { VideoPlayer } from '../../components/videoPlayer';
+import { DisplayComment } from '../../components/displayComment';
 
 import socketIOClient, { Socket } from 'socket.io-client';
+
+import { ChatMessage, Recording } from '../../components/videoPlayer/types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -87,26 +90,6 @@ const VodEntry = styled.div`
     }
 `;
 
-const CommentWrapper = styled.div`
-    border-bottom: 1px solid #ddd;
-    p {
-        margin: 0.2em;
-    }
-`;
-
-interface ChatMessage {
-    user: string;
-    body: string;
-    uuid: string;
-}
-
-interface Recording {
-    start: string;
-    uuid: string;
-    fileName: string;
-    end: string;
-}
-
 export const VideoPlayerPage: React.FC = () => {
     const { uuid } = useParams();
 
@@ -120,7 +103,7 @@ export const VideoPlayerPage: React.FC = () => {
     //Stream state
     const [streamEnded, setStreamEnded] = React.useState(false);
     const [streamUrl, setStreamUrl] = React.useState(null as null | string);
-    const [vodUrl, setVodUrl] = React.useState(null as null | string);
+    const [vod, setVod] = React.useState(null as null | Recording);
 
     const validationSchema = React.useMemo(
         () =>
@@ -138,6 +121,12 @@ export const VideoPlayerPage: React.FC = () => {
     });
 
     const [lectureObj, setLectureObj] = React.useState({} as any);
+
+    const finishedRecordings = !lectureObj.recordings
+        ? []
+        : lectureObj.recordings.filter((recording: Recording) => {
+              return recording.end !== null;
+          });
 
     React.useEffect(() => {
         const socket = socketIOClient();
@@ -205,21 +194,14 @@ export const VideoPlayerPage: React.FC = () => {
                     uuid={uuid}
                     ended={streamEnded}
                     stream={streamUrl}
-                    vod={vodUrl}
+                    vod={vod}
                     chats={chatMessages}
                 ></VideoPlayer>
                 <CommentField key={1}>
                     <CommentHeader>Comments</CommentHeader>
                     <CommentBody>
                         {chatMessages.map((message) => {
-                            return (
-                                <CommentWrapper key={message.uuid}>
-                                    <p>
-                                        <b>{message.user}</b>
-                                    </p>
-                                    <p>{message.body}</p>
-                                </CommentWrapper>
-                            );
+                            return <DisplayComment message={message} key={message.uuid} />;
                         })}
                     </CommentBody>
                     <CommentEntry>
@@ -229,17 +211,15 @@ export const VideoPlayerPage: React.FC = () => {
                     </CommentEntry>
                 </CommentField>
             </WrapperTwo>
-            {lectureObj.recordings.length !== 0 ? (
+            {finishedRecordings.length !== 0 ? (
                 <VodList>
                     <h1>Earlier recordings</h1>
                     <VodFlex>
-                        {lectureObj.recordings.map((recording: Recording) => {
+                        {finishedRecordings.map((recording: Recording) => {
                             return (
                                 <VodEntry
                                     key={`/vods/live/${uuid}/${recording.fileName}`}
-                                    onClick={() =>
-                                        setVodUrl(`http://localhost:3000/vods/live/${uuid}/` + recording.fileName)
-                                    }
+                                    onClick={() => setVod(recording)}
                                 >
                                     {recording.fileName}
                                 </VodEntry>

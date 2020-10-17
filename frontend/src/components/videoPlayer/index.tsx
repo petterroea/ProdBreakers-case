@@ -12,6 +12,8 @@ import videojs, { VideoJsPlayer } from 'video.js';
 
 import socketIOClient from 'socket.io-client';
 
+import { ChatMessage, Recording } from './types';
+
 const Wrapper = styled.div`
     flex: 1;
 `;
@@ -24,17 +26,11 @@ const Slider = styled.input`
     width: 100%;
 `;
 
-interface ChatMessage {
-    user: string;
-    body: string;
-    uuid: string;
-}
-
 interface VideoPlayerProps {
     uuid: string;
     ended: boolean;
     stream: string | null;
-    vod: string | null;
+    vod: Recording | null;
     chats: Array<ChatMessage>;
 }
 
@@ -42,7 +38,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps)
     const videoRef = React.useRef<HTMLVideoElement | null>(null);
     const [player, setPlayer] = React.useState<VideoJsPlayer | null>(null);
 
-    const url = props.vod || props.stream;
+    const vod = props.vod;
+
+    const vodUrl = vod === null ? null : `http://localhost:3000/vods/live/${props.uuid}/` + vod.fileName;
+
+    const url = vodUrl || props.stream;
 
     React.useEffect(() => {
         if (url && videoRef.current) {
@@ -66,7 +66,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps)
                     <div data-vjs-player>
                         <Video ref={videoRef} className="video-js vjs-16-9" playsInline />
                     </div>
-                    <Controlls url={url} isStream={!!props.stream && !props.vod} videoRef={videoRef} />
+                    <Controlls
+                        chats={props.chats}
+                        url={url}
+                        isStream={!!props.stream && !props.vod}
+                        videoRef={videoRef}
+                        start={vod !== null ? vod['start'] : 'TODO'}
+                        end={vod !== null ? vod.end : null}
+                    />
                 </>
             )}
         </Wrapper>
