@@ -30,11 +30,15 @@ type LectureListProps = {
 };
 
 export const LectureList: React.FC<LectureListProps> = (props: LectureListProps) => {
+    const [currentLecture, setCurrentLecture] = setState();
     return (
         <div>
             {props.lectures.map(lecture=>(
                 <LectureEntry name = {lecture.name} isLive = {lecture.isLive} uuid = {lecture.uuid} />
             ))}
+        </div>
+        <div>
+            <MessageList lecture={currentLecture}></MessageList>
         </div>
     )
 }
