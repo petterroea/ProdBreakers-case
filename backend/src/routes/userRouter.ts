@@ -10,7 +10,6 @@ const censorUserMap = (user: User) => {
 	return user
 }
 
-
 userRouter.get('/', async (req, res) => {
   const users = (await getUserRepository().find()).map(censorUserMap)
   res.json(users);
