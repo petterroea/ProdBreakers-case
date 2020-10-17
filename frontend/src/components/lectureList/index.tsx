@@ -1,6 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+
+import MessageList from '../messageList'
+
 export type Lecture = {
     name: string,
     uuid: string,
@@ -30,15 +33,17 @@ type LectureListProps = {
 };
 
 export const LectureList: React.FC<LectureListProps> = (props: LectureListProps) => {
-    const [currentLecture, setCurrentLecture] = setState();
+    const [currentLecture, setCurrentLecture] = useState(""); // UUID
     return (
         <div>
-            {props.lectures.map(lecture=>(
-                <LectureEntry name = {lecture.name} isLive = {lecture.isLive} uuid = {lecture.uuid} />
-            ))}
-        </div>
-        <div>
-            <MessageList lecture={currentLecture}></MessageList>
+            <div>
+                {props.lectures.map(lecture=>(
+                    <LectureEntry name = {lecture.name} isLive = {lecture.isLive} uuid = {lecture.uuid} />
+                ))}
+            </div>
+            <div>
+                <MessageList lecture={currentLecture}/>
+            </div>
         </div>
     )
 }
