@@ -40,13 +40,20 @@ interface VideoPlayerProps {
 export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps) => {
     const videoRef = React.useRef<HTMLVideoElement | null>(null);
 
+    const url = props.vod || props.stream;
+
     return (
         <Wrapper>
-            <h2>The lecture has not started yet</h2>
-            <Video ref={videoRef}>
-                <source src="/placeholder.mp4" type="video/mp4" />
-            </Video>
-            <Controlls videoRef={videoRef} />
+            {!url ? (
+                <h2>Stream is starting shortly, please wait!</h2>
+            ) : (
+                <>
+                    <Video ref={videoRef}>
+                        <source src={url} type="video/mp4" />
+                    </Video>
+                    <Controlls videoRef={videoRef} />
+                </>
+            )}
         </Wrapper>
     );
 };
