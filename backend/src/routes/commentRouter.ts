@@ -63,7 +63,7 @@ router.get('/reply/:uuid', async (req, res) => {
 
 router.use(userMiddleware);
 
-router.post('/lecture/:uuid', async (req, res) => {
+router.put('/lecture/:uuid', async (req, res) => {
   try {
     const lectureUuid: string = req.params.uuid;
     const title: string | undefined = req.body.title;
@@ -85,7 +85,7 @@ router.post('/lecture/:uuid', async (req, res) => {
   }
 });
 
-router.post('/reply/:uuid', async (req, res) => {
+router.put('/reply/:uuid', async (req, res) => {
   try {
     const parentCommentUuid: string = req.params.uuid;
     const title: string | undefined = req.body.title;
