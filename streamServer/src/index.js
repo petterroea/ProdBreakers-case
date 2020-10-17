@@ -11,7 +11,18 @@ const config = {
   },
   http: {
     port: 8000,
+    mediaroot: '/srv/vods',
     allow_origin: '*'
+  },
+  trans: {
+    ffmpeg: '/opt/ffmpeg/ffmpeg',
+    tasks: [
+      {
+        app: 'live',
+        mp4: true,
+        mp4Flags: '[movflags=frag_keyframe+empty_moov]',
+      }
+    ]
   }
 };
  

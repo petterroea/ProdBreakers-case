@@ -15,7 +15,7 @@ services:
     logging:
       options:
        max-size: "1g"
-  stream_erver:
+  stream_server:
     build:
       context: .
       dockerfile: ./Stream.Dockerfile
@@ -24,6 +24,7 @@ services:
      - 8000:8000
     volumes:
       - ../streamServer:/srv/prodBreakers-stream
+      - vods:/srv/vods
     logging:
       options:
        max-size: "1g"
@@ -35,13 +36,14 @@ services:
       - 3739:8080
   db:
     image: postgres:12
-    restart: always
     ports:
       - 5432
     environment:
       POSTGRES_DATABASE: "prodbreakers"
       POSTGRES_PASSWORD: MannCoTabetai
       POSTGRES_USER: prodbreakers
+    volumes:
+      - ./db_setup.sh:/docker-entrypoint-initdb.d/init-uuid.sh
     logging:
       options:
        max-size: "1g"
@@ -68,3 +70,6 @@ services:
       - server
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+      - vods:/var/vods
+volumes:
+  vods:
