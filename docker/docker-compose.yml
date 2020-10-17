@@ -12,6 +12,7 @@ services:
       DATABASE_URL: "postgresql://prodbreakers:MannCoTabetai@db:5432/prodbreakers?schema=public"
     volumes:
       - ../backend:/srv/prodBreakers
+      - vods:/var/vods
     logging:
       options:
        max-size: "1g"
@@ -25,6 +26,8 @@ services:
     volumes:
       - ../streamServer:/srv/prodBreakers-stream
       - vods:/srv/vods
+    links:
+      - server
     logging:
       options:
        max-size: "1g"

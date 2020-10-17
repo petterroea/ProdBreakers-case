@@ -23,7 +23,7 @@ export class Comment {
     @ManyToOne(
         type => User
     )
-    owner: User
+    owner: User|null
 
     @ManyToOne(
         type => Lecture,
@@ -42,7 +42,7 @@ export class Comment {
     @Column()
     postedDate: Date
 
-    constructor(owner: User, body: string, lecture: Lecture) {
+    constructor(owner: User|null, body: string, lecture: Lecture) {
         this.owner = owner
 
         this.lecture = lecture
