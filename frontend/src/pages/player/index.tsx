@@ -185,7 +185,7 @@ export const VideoPlayerPage: React.FC = () => {
         <Wrapper>
             <h2>{lectureObj.name}</h2>
             <WrapperTwo>
-                <VideoPlayer uuid={uuid}></VideoPlayer>
+                <VideoPlayer uuid={uuid} ended={false} stream={null} vod={null} chats={chatMessages}></VideoPlayer>
                 <CommentField key={1}>
                     <CommentHeader>Comments</CommentHeader>
                     <CommentBody>
