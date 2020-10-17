@@ -6,4 +6,4 @@ RUN cd /tmp && wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd
 
 ENV NODE_ENV development
 
-ENTRYPOINT ["yarn", "dev"]
+ENTRYPOINT ["bash", "-c", "yarn && yarn dev"]

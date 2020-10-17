@@ -4,4 +4,4 @@ WORKDIR /srv/prodBreakers
 
 ENV NODE_ENV development
 
-ENTRYPOINT ["yarn", "dev"]
+ENTRYPOINT ["bash", "-c", "yarn && yarn dev"]

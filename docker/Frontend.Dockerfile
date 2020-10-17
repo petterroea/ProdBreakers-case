@@ -2,4 +2,4 @@ FROM node:lts
 
 WORKDIR /srv/prodBreakers
 
-ENTRYPOINT ["yarn", "start"]
+ENTRYPOINT ["bash", "-c", "yarn && yarn start"]
