@@ -53,6 +53,8 @@ export const streamEndHandler = async (uuid: string) => {
 		}})
 
 		const remainingFiles = files.filter((file: string) => {
+			return file.endsWith(".mp4")
+		}).filter((file: string) => {
 			let isIn = false
 			for(let rec of allReordings) {
 				if(rec.fileName !== undefined && rec.fileName === file) {
