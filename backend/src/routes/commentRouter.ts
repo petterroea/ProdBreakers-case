@@ -30,6 +30,10 @@ router.post('/lecture/:uuid', async (req, res) => {
     const lecture = await getLectureRepository().findOne({where: {
       uuid: lectureUuid,
     }});
+    if (!lecture) {
+      res.sendStatus(404);
+      return;
+    }
     const comment = new Comment(req.user, body, lecture);
     comment.title = title;
     const postedComment = await getCommentRepository().save(comment);
