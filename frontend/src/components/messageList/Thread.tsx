@@ -1,10 +1,8 @@
 import React from 'react';
 
 const Thread = (props: any) => {
-  const comment = 'This is not actually the comment that was left';
-  return (
-    <div>{comment}</div>
-  );
+    const comment: string = props.message.body;
+    return <div>{comment}</div>;
 };
 
 export default Thread;
