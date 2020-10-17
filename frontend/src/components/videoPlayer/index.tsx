@@ -13,7 +13,7 @@ import videojs from 'video.js';
 import socketIOClient from 'socket.io-client';
 
 const Wrapper = styled.div`
-    background-color: #f;
+    flex: 1;
 `;
 
 const Video = styled.video`
@@ -44,9 +44,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps)
     const url = props.vod || props.stream;
 
     React.useEffect(() => {
-        console.log(url);
         if (url) {
-            const player = videojs(videoRef.current, { autoplay: true, muted: true }, () => {
+            const player = videojs(videoRef.current, undefined, () => {
                 player.src(url);
             });
 
@@ -62,8 +61,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps)
                 <h2>Stream is starting shortly, please wait!</h2>
             ) : (
                 <>
-                    <Video ref={videoRef} />
-                    <Controlls videoRef={videoRef} />
+                    <div data-vjs-player>
+                        <Video ref={videoRef} className="video-js vjs-16-9" playsInline />
+                    </div>
+                    <Controlls isStream={!!props.stream && !props.vod} videoRef={videoRef} />
                 </>
             )}
         </Wrapper>

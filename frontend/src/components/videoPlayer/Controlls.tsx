@@ -26,7 +26,7 @@ const Slider = styled.input`
     -webkit-transition: 0.2s;
     transition: opacity 0.2s;
 
-    &:hover {
+    &:hover:enabled {
         opacity: 1;
     }
 
@@ -59,9 +59,10 @@ const SliderComments = styled.div`
 
 interface ControllsProps {
     videoRef: React.MutableRefObject<HTMLVideoElement | null>;
+    isStream: boolean;
 }
 
-export const Controlls: React.FC<ControllsProps> = ({ videoRef }) => {
+export const Controlls: React.FC<ControllsProps> = ({ videoRef, isStream }) => {
     const [min, setMin] = React.useState(0);
     const [max, setMax] = React.useState(0);
     const [isPaused, setIsPaused] = React.useState(true);
@@ -86,6 +87,14 @@ export const Controlls: React.FC<ControllsProps> = ({ videoRef }) => {
                         }
                         return lastState;
                     });
+                    if (isStream) {
+                        setMax((lastState) => {
+                            if (videoRef.current) {
+                                return videoRef.current.currentTime;
+                            }
+                            return lastState;
+                        });
+                    }
                 }
             };
             videoRef.current.onended = function () {
@@ -126,7 +135,14 @@ export const Controlls: React.FC<ControllsProps> = ({ videoRef }) => {
                 <ControllerPaus size="2em" onClick={onChangePausePlay} />
             )}
             <SliderWrapper>
-                <Slider type="range" min={min} max={max} onChange={onChangeTime} value={currentTime} />
+                <Slider
+                    type="range"
+                    min={min}
+                    max={max}
+                    onChange={onChangeTime}
+                    value={currentTime}
+                    disabled={isStream}
+                />
                 <SliderComments></SliderComments>
             </SliderWrapper>
         </Wrapper>

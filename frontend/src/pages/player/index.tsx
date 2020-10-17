@@ -30,7 +30,8 @@ const WrapperTwo = styled.div`
 `;
 
 const CommentField = styled.div`
-    min-width: 30em;
+    flex: 1;
+    max-width: 500px;
     min-height: 30em;
 
     overflow-y: auto;
@@ -40,6 +41,7 @@ const CommentField = styled.div`
 
     display: flex;
     flex-direction: column;
+    margin-left: 20px;
 `;
 
 const CommentHeader = styled.h3``;
@@ -164,9 +166,7 @@ export const VideoPlayerPage: React.FC = () => {
             });
 
             socket.on('streamStart', (data: any) => {
-                console.log(`Stream start: ${JSON.stringify(data)}`);
-                //const streamUrl = `rtmp://localhost:1935${data.path}`;
-                const streamUrl = `http://localhost:1935${data.path}/index.m3u8`;
+                const streamUrl = `http://localhost:8000${data.path}/index.m3u8`;
                 //const streamUrl = `http://localhost:8000${data.path}.flv`
                 console.log(`Setting stream url: ${streamUrl}`);
                 setStreamUrl(streamUrl);
