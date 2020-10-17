@@ -3,9 +3,12 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { User } from '@styled-icons/fa-solid/User';
+import { User as Person } from '@styled-icons/fa-solid/User';
 import { UnlockAlt } from '@styled-icons/fa-solid/UnlockAlt';
 import { historyObject as history } from '../../router/historyObject';
+import { useDispatch } from 'react-redux';
+import { userActions } from '../../state/actions/user';
+import { UserRequest } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -87,6 +90,7 @@ const InputWrapper = styled.div`
 const ButtonsWrapper = styled.div`
     width: 100%;
     display: flex;
+    flex-direction: row-reverse;
     flex-wrap: wrap;
     justify-content: space-between;
     @media only screen and (max-width: 800px) {
@@ -148,6 +152,8 @@ const Input = styled.input`
  * Splash component for greetings useer
  */
 export const Login: React.FC = () => {
+    const dispatch = useDispatch();
+
     const validationSchema = React.useMemo(
         () =>
             yup.object({
@@ -165,7 +171,8 @@ export const Login: React.FC = () => {
     const { handleSubmit, register, errors } = useForm({ resolver: yupResolver(validationSchema) });
 
     const onSubmit = handleSubmit((data) => {
-        console.log(data);
+        const user = data as UserRequest;
+        dispatch(userActions.login(user));
     });
 
     const toRegister = (e: React.SyntheticEvent) => {
@@ -186,20 +193,24 @@ export const Login: React.FC = () => {
                         <EmailWrapper>
                             <span>Username</span>
                             <InputWrapper>
-                                <User size="1em" />
-                                <Input name="username" ref={register} />
+                                <Person size="1em" />
+                                <Input name="username" ref={register} tabIndex={1} />
                             </InputWrapper>
                         </EmailWrapper>
                         <PasswordWrapper>
                             <span>Password</span>
                             <InputWrapper>
                                 <UnlockAlt size="1em" />
-                                <Input name="password" type="password" ref={register} />
+                                <Input name="password" type="password" ref={register} tabIndex={2} />
                             </InputWrapper>
                         </PasswordWrapper>
                         <ButtonsWrapper>
-                            <ToRegisterButton onClick={toRegister}>To Register</ToRegisterButton>
-                            <LoginButton type="submit">Login</LoginButton>
+                            <LoginButton type="submit" tabIndex={3}>
+                                Login
+                            </LoginButton>
+                            <ToRegisterButton onClick={toRegister} tabIndex={4}>
+                                To Register
+                            </ToRegisterButton>
                         </ButtonsWrapper>
                     </LoginForm>
                 </Wrapper2>

@@ -22,7 +22,7 @@ export const initializeRealtimeComponent= (http) => {
 			const chat = new Comment(null, message, lecture)
 			await getCommentRepository().save(chat)
 
-			io.to(uuid).emit('chat', { user: 'bob', message, uuid: chat.uuid, postedDate: chat.postedDate  })
+			io.to(uuid).emit('chat', { user: 'bob', body: message, uuid: chat.uuid, postedDate: chat.postedDate  })
 		}
 	}
 
@@ -47,17 +47,19 @@ export const initializeRealtimeComponent= (http) => {
 			//Finally, send update
 			io.to(uuid).emit('streamStart', {path: data.StreamPath})
 
-			runningStreams.push(uuid)
+			if(!runningStreams.includes(uuid)) {
+				runningStreams.push(uuid)
+			}
 		})
 		socket.on('streamEnd', async (data) => {
 			const uuid = data.StreamPath.replace("/live/", "")
 
 			await streamEndHandler(uuid)
-
-			io.to(uuid).emit('streamEnd', {path: data.StreamPath})
-			runningStreams.filter((entry) => {
+			console.log("Sending stream end")
+			runningStreams = runningStreams.filter((entry) => {
 				return entry !== uuid
 			})
+			io.to(uuid).emit('streamEnd', {path: data.StreamPath})
 		} )
 		socket.on('disconnect', () => {
 			console.log('user disconnected');

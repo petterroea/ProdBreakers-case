@@ -26,7 +26,7 @@ const Slider = styled.input`
 
 interface ChatMessage {
     user: string;
-    message: string;
+    body: string;
     uuid: string;
 }
 

@@ -34,8 +34,6 @@ const CommentField = styled.div`
     max-width: 500px;
     min-height: 30em;
 
-    overflow-y: auto;
-
     border: 1px solid rgba(0, 0, 0, 0.2);
     padding: 1em;
 
@@ -49,7 +47,8 @@ const CommentHeader = styled.h3``;
 const CommentUserName = styled.h5``;
 
 const CommentBody = styled.div`
-    height: 100%;
+    max-height: 20em;
+    overflow-y: auto;
 `;
 
 const CommentEntry = styled.div`
@@ -97,7 +96,7 @@ const CommentWrapper = styled.div`
 
 interface ChatMessage {
     user: string;
-    message: string;
+    body: string;
     uuid: string;
 }
 
@@ -151,6 +150,11 @@ export const VideoPlayerPage: React.FC = () => {
                 return;
             }
             setLectureObj(await response.json());
+
+            const messages = await fetch(`/api/comment/lecture/${uuid}`);
+            if (response.status === 200) {
+                setChatMessages(await messages.json());
+            }
 
             socket.emit('join', { uuid });
 
@@ -213,7 +217,7 @@ export const VideoPlayerPage: React.FC = () => {
                                     <p>
                                         <b>{message.user}</b>
                                     </p>
-                                    <p>{message.message}</p>
+                                    <p>{message.body}</p>
                                 </CommentWrapper>
                             );
                         })}
@@ -233,7 +237,9 @@ export const VideoPlayerPage: React.FC = () => {
                             return (
                                 <VodEntry
                                     key={`/vods/live/${uuid}/${recording.fileName}`}
-                                    onClick={() => setVodUrl('http://localhost:3000' + recording.fileName)}
+                                    onClick={() =>
+                                        setVodUrl(`http://localhost:3000/vods/live/${uuid}/` + recording.fileName)
+                                    }
                                 >
                                     {recording.fileName}
                                 </VodEntry>
