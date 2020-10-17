@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { User } from '@styled-icons/fa-solid/User';
 import { UnlockAlt } from '@styled-icons/fa-solid/UnlockAlt';
 import { historyObject as history } from '../../router/historyObject';
+import { Controlls } from './Controlls';
 
 import socketIOClient from 'socket.io-client';
 
@@ -14,14 +15,28 @@ const Wrapper = styled.div`
     background-color: #f;
 `;
 
+const Video = styled.video`
+    width: 500px;
+`;
+
+const Slider = styled.input`
+    width: 100%;
+`;
+
 interface VideoPlayerProps {
     uuid: string;
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps) => {
+    const videoRef = React.useRef<HTMLVideoElement | null>(null);
+
     return (
         <Wrapper>
             <h2>The lecture has not started yet</h2>
+            <Video ref={videoRef}>
+                <source src="/placeholder.mp4" type="video/mp4" />
+            </Video>
+            <Controlls videoRef={videoRef} />
         </Wrapper>
     );
 };
