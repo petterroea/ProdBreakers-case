@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
 
 import { User } from './user'
+import { Recording } from './recording'
 
 @Entity({})
 export class Lecture {
@@ -13,6 +14,11 @@ export class Lecture {
     )
     owner: User
 
+    @OneToMany(
+        type => Recording,
+        recording => recording.lecture)
+    recordings: Recording[]
+
     @Column({})
     name: string
 
@@ -21,6 +27,9 @@ export class Lecture {
 
     @Column()
     start: Date
+
+    @Column({default: false})
+    streamRunning: boolean
 
     @Column()
     end: Date
