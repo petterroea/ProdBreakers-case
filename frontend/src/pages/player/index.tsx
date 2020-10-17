@@ -158,8 +158,9 @@ export const VideoPlayerPage: React.FC = () => {
 
             socket.on('streamStart', (data: any) => {
                 console.log(`Stream start: ${JSON.stringify(data)}`);
-                const streamUrl = `rtmp://localhost:1935${data.path}`;
-                //const streamUrl = `localhost:8000${data.path}.flv`
+                //const streamUrl = `rtmp://localhost:1935${data.path}`;
+                const streamUrl = `http://localhost:1935${data.path}/index.m3u8`;
+                //const streamUrl = `http://localhost:8000${data.path}.flv`
                 console.log(`Setting stream url: ${streamUrl}`);
                 setStreamUrl(streamUrl);
             });

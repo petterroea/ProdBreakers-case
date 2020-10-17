@@ -8,6 +8,7 @@ import { User } from '@styled-icons/fa-solid/User';
 import { UnlockAlt } from '@styled-icons/fa-solid/UnlockAlt';
 import { historyObject as history } from '../../router/historyObject';
 import { Controlls } from './Controlls';
+import videojs from 'video.js';
 
 import socketIOClient from 'socket.io-client';
 
@@ -42,15 +43,26 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps)
 
     const url = props.vod || props.stream;
 
+    React.useEffect(() => {
+        console.log(url);
+        if (url) {
+            const player = videojs(videoRef.current, { autoplay: true, muted: true }, () => {
+                player.src(url);
+            });
+
+            return () => {
+                player.dispose();
+            };
+        }
+    }, [url]);
+
     return (
         <Wrapper>
             {!url ? (
                 <h2>Stream is starting shortly, please wait!</h2>
             ) : (
                 <>
-                    <Video ref={videoRef}>
-                        <source src={url} type="video/mp4" />
-                    </Video>
+                    <Video ref={videoRef} />
                     <Controlls videoRef={videoRef} />
                 </>
             )}
