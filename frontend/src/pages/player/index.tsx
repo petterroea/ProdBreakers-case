@@ -30,7 +30,8 @@ const WrapperTwo = styled.div`
 `;
 
 const CommentField = styled.div`
-    min-width: 30em;
+    flex: 1;
+    max-width: 500px;
     min-height: 30em;
 
     overflow-y: auto;
@@ -40,6 +41,7 @@ const CommentField = styled.div`
 
     display: flex;
     flex-direction: column;
+    margin-left: 20px;
 `;
 
 const CommentHeader = styled.h3``;
@@ -69,6 +71,7 @@ const Input = styled.input`
 
 const VodList = styled.div`
     width: 80%;
+    overflow: auto;
 `;
 const VodFlex = styled.div`
     display: flex;
@@ -78,10 +81,17 @@ const VodEntry = styled.div`
     padding: 1em;
     border: 1px solid #ddd;
     overflow-x: auto;
-    width: 10em;
+    min-width: 10em;
     :hover {
         background-color: #eee;
         cursor: pointer;
+    }
+`;
+
+const CommentWrapper = styled.div`
+    border-bottom: 1px solid #ddd;
+    p {
+        margin: 0.2em;
     }
 `;
 
@@ -107,6 +117,11 @@ export const VideoPlayerPage: React.FC = () => {
     const [vodList, setVodList] = React.useState([] as Vod[]);
 
     const [socket, setSocket] = React.useState({} as typeof Socket);
+
+    //Stream state
+    const [streamEnded, setStreamEnded] = React.useState(false);
+    const [streamUrl, setStreamUrl] = React.useState(null as null | string);
+    const [vodUrl, setVodUrl] = React.useState(null as null | string);
 
     const validationSchema = React.useMemo(
         () =>
@@ -151,13 +166,15 @@ export const VideoPlayerPage: React.FC = () => {
             });
 
             socket.on('streamStart', (data: any) => {
-                console.log('Stream start');
-                console.log(data);
+                const streamUrl = `http://localhost:8000${data.path}/index.m3u8`;
+                console.log(`Setting stream url: ${streamUrl}`);
+                setStreamUrl(streamUrl);
             });
 
             socket.on('streamEnd', (data: any) => {
                 console.log('Stream end');
                 console.log(data);
+                setStreamEnded(true);
             });
 
             setLoading(false);
@@ -185,12 +202,25 @@ export const VideoPlayerPage: React.FC = () => {
         <Wrapper>
             <h2>{lectureObj.name}</h2>
             <WrapperTwo>
-                <VideoPlayer uuid={uuid}></VideoPlayer>
+                <VideoPlayer
+                    uuid={uuid}
+                    ended={streamEnded}
+                    stream={streamUrl}
+                    vod={vodUrl}
+                    chats={chatMessages}
+                ></VideoPlayer>
                 <CommentField key={1}>
                     <CommentHeader>Comments</CommentHeader>
                     <CommentBody>
                         {chatMessages.map((message) => {
-                            return <p key={message.uuid}>{message.message}</p>;
+                            return (
+                                <CommentWrapper key={message.uuid}>
+                                    <p>
+                                        <b>{message.user}</b>
+                                    </p>
+                                    <p>{message.message}</p>
+                                </CommentWrapper>
+                            );
                         })}
                     </CommentBody>
                     <CommentEntry>
@@ -202,10 +232,17 @@ export const VideoPlayerPage: React.FC = () => {
             </WrapperTwo>
             {vodList.length !== 0 ? (
                 <VodList>
-                    <h1>Vods</h1>
+                    <h1>Earlier recordings</h1>
                     <VodFlex>
                         {vodList.map((vodObj) => {
-                            return <VodEntry key={vodObj.fileName}>{vodObj.fileName}</VodEntry>;
+                            return (
+                                <VodEntry
+                                    key={vodObj.fileName}
+                                    onClick={() => setVodUrl('http://localhost:3000' + vodObj.path)}
+                                >
+                                    {vodObj.fileName}
+                                </VodEntry>
+                            );
                         })}
                     </VodFlex>
                 </VodList>
