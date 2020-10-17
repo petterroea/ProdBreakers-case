@@ -20,12 +20,12 @@ passport.use(new LocalStrategy(
 ));
 
 loginRouter.post('/', 
-  passport.authenticate('local', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('../');
-  });
+  passport.authenticate('local',
+    { failureRedirect: '/' },
+    (...a) => console.log(a)),
+);
 
-  loginRouter.get('/',
-    (req, res) => {res.send({info: 'lorem ipsum ?'})}
-  );
+loginRouter.get('/',
+  (req, res) => {res.send({info: 'lorem ipsum ?'})}
+);
 export default loginRouter;

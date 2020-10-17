@@ -18,8 +18,9 @@ const setupApp = (): express.Application => {
 	const app = express();
 	app.use(cors());
 
+  app.use('/api/user', userRouter);
 	app.use('/api/lecture', lectureRouter);
-	app.use('/login', loginRouter);
+	app.use('/api/login', loginRouter);
 	app.use((_req, _res, next) => {
 	  next(createError(404));
 	});
