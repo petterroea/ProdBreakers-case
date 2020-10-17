@@ -9,9 +9,9 @@ import { initializeRealtimeComponent } from './realtime';
 
 import userRouter from './routes/userRouter';
 import lectureRouter from './routes/lectureRouter';
+import commentRouter from './routes/commentRouter';
 
 import { dbConfig } from './config';
-
 
 const port = process.env.PORT || '9000';
 
@@ -22,6 +22,7 @@ const setupApp = (): express.Application => {
 
   app.use('/api/user', userRouter);
 	app.use('/api/lecture', lectureRouter);
+	app.use('/api/comment', commentRouter);
 	
 	app.use((_req, _res, next) => {
 	  next(createError(404));
