@@ -1,29 +1,29 @@
 import { Router } from 'express';
+import jwt from 'jsonwebtoken';
 
 import { getUserRepository } from '../database'
-import passport from 'passport';
-import LocalStrategy from 'passport-local';
+import { User } from '../entities/user';
+
+const JWT_KEY = process.env.JWT_KEY ?? 'flugelhorn';
 
 const loginRouter = Router();
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    const user = getUserRepository().findOne({where: {
-      username: username
-    }})
-    .then((user) => {
-      if (!user) { return done(null, false); }
-      if (!user.comparePassword(password)) { return done(null, false); }
-      return done(null, user);
-    })
+loginRouter.post('/', async (req, res) => {
+  const username: string = req.body.username;
+  const password: string = req.body.password;
+  const user: User = await getUserRepository().findOne({where: {
+    username: username
+  }});
+  if (user && user.comparePassword(password)) {
+    const token = jwt.sign({ userId: user.id }, JWT_KEY);
+    res.json({
+      user,
+      token,
+    });
+  } else {
+    res.sendStatus(401);
   }
-));
-
-loginRouter.post('/', 
-  passport.authenticate('local',
-    { failureRedirect: '/' },
-    (...a) => console.log(a)),
-);
+});
 
 loginRouter.get('/',
   (req, res) => {res.send({info: 'lorem ipsum ?'})}
