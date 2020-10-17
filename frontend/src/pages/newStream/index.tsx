@@ -168,8 +168,15 @@ export const NewStream: React.FC = () => {
 
         // If response is OK then return result
         if (response.ok && response.status === 200) {
-            const json = await response.json();
-            console.log(json);
+            const data: {
+                description: string;
+                end: string;
+                name: string;
+                start: string;
+                uuid: string;
+            } = await response.json();
+
+            history.push(`/stream/${data.uuid}`);
         }
     });
 

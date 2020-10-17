@@ -27,7 +27,7 @@ export const RouterComponent: React.FC = () => {
                             <Route exact path="/" component={Splash} />
                             <AuthenticatedRoute exact path="/login" not={<Login />} is={<Redirect to="/" />} />
                             <AuthenticatedRoute exact path="/register" not={<Register />} is={<Redirect to="/" />} />
-                            <AuthenticatedRoute exact path="/stream/new" not={<Redirect to="/" />} is={<NewStream />} />
+                            <AuthenticatedRoute exact path="/new/stream" not={<Redirect to="/" />} is={<NewStream />} />
                             <AuthenticatedRoute
                                 exact
                                 path="/player/:uuid"
@@ -35,7 +35,6 @@ export const RouterComponent: React.FC = () => {
                                 is={<VideoPlayerPage />}
                             />
                             <AuthenticatedRoute
-                                exact
                                 path="/stream/:uuid"
                                 not={<Redirect to="/" />}
                                 is={<ReadyStreamPage />}

@@ -32,8 +32,8 @@ export const Navigation: React.FC = () => {
                 <>
                     <NavigationElement
                         text={'New Lecture'}
-                        location={'/stream/new'}
-                        selected={history.location.pathname === '/stream/new'}
+                        location={'/new/stream'}
+                        selected={history.location.pathname === '/new/stream'}
                         onClick={onClick}
                     />
                     <NavigationElement
