@@ -12,7 +12,7 @@ const userMiddleware = async (req, res, next) => {
       const payload = jwt.verify(token, JWT_KEY);
       const { userId } = payload;
       const user = await getUserRepository().findOne({where: {
-        id: userId,
+        uuid: userId,
       }});
       req.user = user;
       next();
