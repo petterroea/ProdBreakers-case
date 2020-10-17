@@ -3,7 +3,7 @@ import cors from 'cors';
 import createError from 'http-errors';
 import http from 'http';
 
-import { setupDatabaseConection } from './database';
+import { setupDatabaseConnection } from './database';
 import { initializeRealtimeComponent } from './realtime';
 
 import userRouter from './routes/userRouter';

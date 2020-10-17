@@ -17,10 +17,15 @@ userRouter.get('/', async (req, res) => {
 
 userRouter.get('/:uuid', async (req, res) => {
   const user = await getUserRepository().findOne({where: {
-  	id: req.params.uuid
+  	uuid: req.params.uuid
   }});
-  user.hashedPassword = undefined;
-  res.json(user);
+  if(user === undefined) {
+  	res.status(404)
+  	res.send()
+  } else {
+  	user.hashedPassword = undefined;
+  	res.json(user);
+  }
 });
 
 export default userRouter;

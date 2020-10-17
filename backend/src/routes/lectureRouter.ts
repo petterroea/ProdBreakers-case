@@ -22,10 +22,18 @@ lectureRouter.get('/', async (req, res) => {
 
 lectureRouter.get('/:uuid', async (req, res) => {
   const lecture = await getLectureRepository().findOne({where: {
-  	id: req.params.uuid
+  	uuid: req.params.uuid
   }});
-  lecture.owner.hashedPassword = undefined;
-  res.json(lecture);
+  if(lecture === undefined) {
+    res.status(404)
+    res.send()
+  }
+  else {
+    if(lecture.owner !== undefined) {
+      lecture.owner.hashedPassword = undefined;
+    }
+    res.json(lecture);
+  }
 });
 
 export default lectureRouter;
