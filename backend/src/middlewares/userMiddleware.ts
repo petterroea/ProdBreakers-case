@@ -9,8 +9,6 @@ const userMiddleware = async (req, res, next) => {
   try {
     if (authorization && authorization.startsWith('Bearer ')) {
       const token = authorization.substring(7);
-      console.log(authorization);
-      console.log(token);
       const payload = jwt.verify(token, JWT_KEY);
       const { userId } = payload;
       const user = await getUserRepository().findOne({where: {
@@ -19,12 +17,9 @@ const userMiddleware = async (req, res, next) => {
       req.user = user;
       next();
     } else {
-      console.log(authorization);
       res.sendStatus(401);
     }
   } catch (e) {
-    console.log('Error');
-    console.log(e);
     res.sendStatus(401);
   }
 };
