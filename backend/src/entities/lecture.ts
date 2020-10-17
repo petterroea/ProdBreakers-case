@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
 
 import { User } from './user'
+import { Recording } from './recording'
 
 @Entity({})
 export class Lecture {
@@ -12,6 +13,11 @@ export class Lecture {
         user => user.lectures,
     )
     owner: User
+
+    @OneToMany(
+        type => Recording,
+        recording => recording.lecture)
+    recordings: Recording[]
 
     @Column({})
     name: string
