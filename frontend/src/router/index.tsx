@@ -10,6 +10,7 @@ import { Login } from '../pages/login';
 import { Register } from '../pages/register';
 import { VideoPlayerPage } from '../pages/player';
 import { ReadyStreamPage } from '../pages/stream';
+import { LecturesPage } from '../pages/lectures'
 
 export const RouterComponent: React.FC = () => {
     return (
@@ -18,6 +19,7 @@ export const RouterComponent: React.FC = () => {
                 <Route exact path="/" component={Splash} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
+                <Route exact path="/lectures" component={LecturesPage} />
                 <Route exact path="/player/:uuid" component={VideoPlayerPage} />
                 <Route exact path="/stream/:uuid" component={ReadyStreamPage} />
             </Switch>
