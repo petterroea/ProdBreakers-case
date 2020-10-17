@@ -12,7 +12,7 @@ import videojs, { VideoJsPlayer } from 'video.js';
 
 import socketIOClient from 'socket.io-client';
 
-import { ChatMessage, Recording } from './types';
+import { ChatMessage, Recording, Stream } from './types';
 
 const Wrapper = styled.div`
     flex: 1;
@@ -29,7 +29,7 @@ const Slider = styled.input`
 interface VideoPlayerProps {
     uuid: string;
     ended: boolean;
-    stream: string | null;
+    stream: Stream | null;
     vod: Recording | null;
     chats: Array<ChatMessage>;
 }
@@ -39,10 +39,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps)
     const [player, setPlayer] = React.useState<VideoJsPlayer | null>(null);
 
     const vod = props.vod;
-
     const vodUrl = vod === null ? null : `http://localhost:3000/vods/live/${props.uuid}/` + vod.fileName;
 
-    const url = vodUrl || props.stream;
+    const stream = props.stream;
+    const streamUrl = stream === null ? null : stream.url;
+
+    const url = vodUrl || streamUrl;
+
+    const start = vod !== null ? vod['start'] : stream !== null ? stream.startTime : 'none';
 
     React.useEffect(() => {
         if (url && videoRef.current) {
@@ -71,7 +75,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps)
                         url={url}
                         isStream={!!props.stream && !props.vod}
                         videoRef={videoRef}
-                        start={vod !== null ? vod['start'] : 'TODO'}
+                        start={start}
                         end={vod !== null ? vod.end : null}
                     />
                 </>

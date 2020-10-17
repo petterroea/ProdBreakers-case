@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ControllerPaus } from '@styled-icons/entypo/ControllerPaus';
 import { ControllerPlay } from '@styled-icons/entypo/ControllerPlay';
 import { historyObject as history } from '../../router/historyObject';
+import { Comment } from '@styled-icons/boxicons-regular/Comment';
 
 import socketIOClient from 'socket.io-client';
 
@@ -73,7 +74,6 @@ interface CommentProps {
 const CommentEntry = styled.div`
     width: 1.5em;
     height: 1.5em;
-    background-color: #f00;
 
     position: absolute;
     top: 0;
@@ -190,9 +190,14 @@ export const Controlls: React.FC<ControllsProps> = ({ videoRef, isStream, url, s
         const chatTime = new Date(chat.postedDate);
         const normalizedTime = (chatTime.getTime() - startTime.getTime()) / 1000;
 
-        if (videoRef !== null && videoRef.current !== null) {
-            return Math.abs(videoRef.current.currentTime - normalizedTime) < 3;
+        if (isStream) {
+            return Math.abs(endTime.getTime() - normalizedTime) < 3;
+        } else {
+            if (videoRef !== null && videoRef.current !== null) {
+                return Math.abs(videoRef.current.currentTime - normalizedTime) < 3;
+            }
         }
+
         return false;
     });
 
@@ -229,7 +234,9 @@ export const Controlls: React.FC<ControllsProps> = ({ videoRef, isStream, url, s
                                 <CommentEntry
                                     key={chat.uuid}
                                     progress={(chatTime.getTime() - startTime.getTime()) / duration}
-                                ></CommentEntry>
+                                >
+                                    <Comment />
+                                </CommentEntry>
                             );
                         })}
                         {activeChats.length !== 0 ? (

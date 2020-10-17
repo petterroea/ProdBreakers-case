@@ -13,7 +13,7 @@ import { DisplayComment } from '../../components/displayComment';
 
 import socketIOClient, { Socket } from 'socket.io-client';
 
-import { ChatMessage, Recording } from '../../components/videoPlayer/types';
+import { ChatMessage, Recording, Stream } from '../../components/videoPlayer/types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -102,7 +102,7 @@ export const VideoPlayerPage: React.FC = () => {
 
     //Stream state
     const [streamEnded, setStreamEnded] = React.useState(false);
-    const [streamUrl, setStreamUrl] = React.useState(null as null | string);
+    const [stream, setStream] = React.useState(null as null | Stream);
     const [vod, setVod] = React.useState(null as null | Recording);
 
     const validationSchema = React.useMemo(
@@ -156,7 +156,10 @@ export const VideoPlayerPage: React.FC = () => {
             socket.on('streamStart', (data: any) => {
                 const streamUrl = `http://localhost:8000${data.path}/index.m3u8`;
                 console.log(`Setting stream url: ${streamUrl}`);
-                setStreamUrl(streamUrl);
+                setStream({
+                    url: streamUrl,
+                    startTime: data.startTime as string,
+                });
             });
 
             socket.on('streamEnd', (data: any) => {
@@ -193,7 +196,7 @@ export const VideoPlayerPage: React.FC = () => {
                 <VideoPlayer
                     uuid={uuid}
                     ended={streamEnded}
-                    stream={streamUrl}
+                    stream={stream}
                     vod={vod}
                     chats={chatMessages}
                 ></VideoPlayer>

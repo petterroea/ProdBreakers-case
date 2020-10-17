@@ -11,3 +11,8 @@ export interface Recording {
     fileName: string;
     end: string;
 }
+
+export interface Stream {
+    url: string;
+    startTime: string;
+}
