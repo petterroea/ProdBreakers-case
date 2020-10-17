@@ -20,16 +20,28 @@ const StyleLink = styled(Link)`
     display: block;
 `;
 
+const Container = styled.div`
+    height: 60%;
+  `
+
+const Column = styled.div`
+    width: 500px;
+    height: 100%;
+    border: 1px solid #efefef;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-right: 10px;
+    float: left;
+  `
+
 export const LectureEntry: React.FC<Lecture> = ({ name, uuid, isLive, onClick }) => {
-    const link: string = '/api/lecture/' + uuid;
-    console.log(name);
-    console.log(uuid);
-    console.log(isLive);
+    const link: string = '/player/' + uuid;
     return (
-        <StyleLink to={link} onClick={onClick}>
+        <div>
+            <StyleLink to={link} onClick={onClick}>Link</StyleLink>
             <Info>name: {name}</Info>
             <Info>live: {isLive}</Info>
-        </StyleLink>
+        </div>
     );
 };
 
@@ -41,12 +53,12 @@ export const LectureList: React.FC<LectureListProps> = (props: LectureListProps)
     const [currentLecture, setCurrentLecture] = React.useState(''); // UUID
 
     const onClick = (lecture: string) => {
-        console.log('New main lecture: ' + lecture);
         setCurrentLecture(lecture);
     };
     return (
-        <div>
-            <div>
+        <Container>
+            <Column>
+                <h2>Lectures</h2>
                 {props.lectures.map((lecture) => (
                     <LectureEntry
                         key={lecture.uuid}
@@ -58,10 +70,13 @@ export const LectureList: React.FC<LectureListProps> = (props: LectureListProps)
                         }}
                     />
                 ))}
-            </div>
-            <div>
-                <MessageList lecture={currentLecture} />
-            </div>
-        </div>
+            </Column>
+            {currentLecture && (
+                <Column>
+                        <h2>{currentLecture}</h2>
+                        <MessageList lecture={currentLecture} />
+                </Column>
+            )}
+        </Container>
     );
 };

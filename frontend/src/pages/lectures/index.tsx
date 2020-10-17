@@ -7,14 +7,15 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 100%;
+    width: 70%;
     align-items: center;
     justify-content: center;
 `;
 
 const WrapperTwo = styled.div`
-    width: 30%;
+    width: 100%;
     display: flex;
+    height: 60%;
     flex-direction: row;
     align-items: stretch;
     flex-wrap: wrap;
@@ -41,8 +42,6 @@ export const LecturesPage: React.FC = () => {
             const newList: Lecture[] = [];
             const jsonLectureList = await response.json();
             jsonLectureList.forEach(({ name, end, uuid }: { name: string; end?: Date; uuid: string }) => {
-                console.log('Hello, discord!');
-                console.log(jsonLectureList);
                 const lecture = {
                     name: name,
                     isLive: end === undefined,
@@ -73,10 +72,8 @@ export const LecturesPage: React.FC = () => {
     }
     return (
         <Wrapper>
-            <h2>Lectures</h2>
-            <WrapperTwo>
-                <LectureList lectures={lectures} />
-            </WrapperTwo>
+            
+            <LectureList lectures={lectures} />
         </Wrapper>
     );
 };
