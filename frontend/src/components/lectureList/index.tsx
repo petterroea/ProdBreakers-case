@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -15,7 +16,7 @@ const Info = styled.p`
     color: #ccc;
 `;
 
-const Link = styled.a`
+const StyleLink = styled(Link)`
     display: block;
 `;
 
@@ -25,10 +26,10 @@ export const LectureEntry: React.FC<Lecture> = ({name, uuid, isLive,onClick}) =>
     console.log(uuid);
     console.log(isLive);
     return (
-        <Link href={link} onClick={onClick} >
+        <StyleLink to={link} onClick={onClick} >
             <Info>name: {name}</Info>
             <Info>live: {isLive}</Info>
-        </Link>
+        </StyleLink>
     )
 }
 
