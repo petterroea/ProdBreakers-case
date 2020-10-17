@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route, Router, Redirect } from 'react-router-dom';
+import styled from 'styled-compoents';
 
 // History
 import { historyObject } from './historyObject';
@@ -15,6 +16,12 @@ import { VideoPlayerPage } from '../pages/player';
 import { ReadyStreamPage } from '../pages/stream';
 import { NewStream } from '../pages/newStream';
 
+const Body = styled.div`
+    height: Calc(100% - 80px);
+    display: flex;
+    position: relative;
+`;
+
 export const RouterComponent: React.FC = () => {
     return (
         <Router history={historyObject}>
@@ -24,21 +31,33 @@ export const RouterComponent: React.FC = () => {
                     render={(props) => (
                         <>
                             <Header />
-                            <Route exact path="/" component={Splash} />
-                            <AuthenticatedRoute exact path="/login" not={<Login />} is={<Redirect to="/" />} />
-                            <AuthenticatedRoute exact path="/register" not={<Register />} is={<Redirect to="/" />} />
-                            <AuthenticatedRoute exact path="/new/stream" not={<Redirect to="/" />} is={<NewStream />} />
-                            <AuthenticatedRoute
-                                exact
-                                path="/player/:uuid"
-                                not={<Redirect to="/" />}
-                                is={<VideoPlayerPage />}
-                            />
-                            <AuthenticatedRoute
-                                path="/stream/:uuid"
-                                not={<Redirect to="/" />}
-                                is={<ReadyStreamPage />}
-                            />
+                            <Body>
+                                <Route exact path="/" component={Splash} />
+                                <AuthenticatedRoute exact path="/login" not={<Login />} is={<Redirect to="/" />} />
+                                <AuthenticatedRoute
+                                    exact
+                                    path="/register"
+                                    not={<Register />}
+                                    is={<Redirect to="/" />}
+                                />
+                                <AuthenticatedRoute
+                                    exact
+                                    path="/new/stream"
+                                    not={<Redirect to="/" />}
+                                    is={<NewStream />}
+                                />
+                                <AuthenticatedRoute
+                                    exact
+                                    path="/player/:uuid"
+                                    not={<Redirect to="/" />}
+                                    is={<VideoPlayerPage />}
+                                />
+                                <AuthenticatedRoute
+                                    path="/stream/:uuid"
+                                    not={<Redirect to="/" />}
+                                    is={<ReadyStreamPage />}
+                                />
+                            </Body>
                         </>
                     )}
                 />
