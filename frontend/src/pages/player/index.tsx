@@ -67,10 +67,20 @@ const Input = styled.input`
     outline: none;
 `;
 
+const VodList = styled.div`
+    width: 100%;
+`;
+
 interface ChatMessage {
     user: string;
     message: string;
     uuid: string;
+}
+
+interface Vod {
+    uuid: string;
+    fileName: string;
+    path: string;
 }
 
 export const VideoPlayerPage: React.FC = () => {
@@ -80,6 +90,7 @@ export const VideoPlayerPage: React.FC = () => {
     const [notFound, setNotFound] = React.useState(false);
 
     const [chatMessages, setChatMessages] = React.useState([] as ChatMessage[]);
+    const [vodList, setVodList] = React.useState([] as Vod[]);
 
     const [socket, setSocket] = React.useState({} as typeof Socket);
 
@@ -112,6 +123,11 @@ export const VideoPlayerPage: React.FC = () => {
             }
             setLectureObj(await response.json());
 
+            const vodReq = await fetch(`/api/lecture/${uuid}/vods`);
+            if (vodReq.status === 200) {
+                setVodList(await vodReq.json());
+            }
+
             socket.emit('join', { uuid });
 
             socket.on('chat', (data: any) => {
@@ -123,13 +139,11 @@ export const VideoPlayerPage: React.FC = () => {
             socket.on('streamStart', (data: any) => {
                 console.log('Stream start');
                 console.log(data);
-                setChatMessages((prev) => [...prev, data]);
             });
 
             socket.on('streamEnd', (data: any) => {
                 console.log('Stream end');
                 console.log(data);
-                setChatMessages((prev) => [...prev, data]);
             });
 
             setLoading(false);
@@ -172,6 +186,7 @@ export const VideoPlayerPage: React.FC = () => {
                     </CommentEntry>
                 </CommentField>
             </WrapperTwo>
+            {vodList.length !== 0 ? <VodList>There are vods</VodList> : null}
             <div>
                 {lectureObj.description.split('\n').map((line: string, index: number) => {
                     return <p key={index}>{line}</p>;
