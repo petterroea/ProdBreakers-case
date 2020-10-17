@@ -40,10 +40,12 @@ export const LecturesPage: React.FC = () => {
             }
             const newList: Lecture[] = [];
             const jsonLectureList = await response.json();
-            jsonLectureList.forEach((name: string, end: Date, uuid: string) => {
+            jsonLectureList.forEach(({name,end,uuid}: {name: string, end?: Date, uuid: string}) => {
+                console.log("Hello, discord!");
+                console.log(jsonLectureList);
                 const lecture = {
                     name: name,
-                    isLive: end == null,
+                    isLive: end === undefined,
                     uuid: uuid,
                 } as Lecture;
                 newList.push(lecture);

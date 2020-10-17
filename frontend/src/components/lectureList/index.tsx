@@ -21,11 +21,13 @@ const Link = styled.a`
 
 export const LectureEntry: React.FC<Lecture> = ({name, uuid, isLive,onClick}) => {
     const link: string = "/api/lecture/" + uuid;
-
+    console.log(name);
+    console.log(uuid);
+    console.log(isLive);
     return (
         <Link href={link} onClick={onClick} >
-            <Info className='lectureName'>name: {name}</Info>
-            <Info className='lectureStreamState'>live: {isLive}</Info>
+            <Info>name: {name}</Info>
+            <Info>live: {isLive}</Info>
         </Link>
     )
 }

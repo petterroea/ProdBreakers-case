@@ -1,5 +1,8 @@
 import React from 'react';
 
-const MessageList = () => <div>Messages are here!</div>;
+interface Props {
+    lecture: string
+}
+const MessageList:React.FC<Props> = ({lecture}) => <div>Messages are here! {lecture}</div>;
 
 export default MessageList;
