@@ -27,9 +27,19 @@ export const RouterComponent: React.FC = () => {
                             <Route exact path="/" component={Splash} />
                             <AuthenticatedRoute exact path="/login" not={<Login />} is={<Redirect to="/" />} />
                             <AuthenticatedRoute exact path="/register" not={<Register />} is={<Redirect to="/" />} />
-                            <Route exact path="/stream/new" component={NewStream} />
-                            <Route exact path="/player/:uuid" component={VideoPlayerPage} />
-                            <Route exact path="/stream/:uuid" component={ReadyStreamPage} />
+                            <AuthenticatedRoute exact path="/stream/new" not={<Redirect to="/" />} is={<NewStream />} />
+                            <AuthenticatedRoute
+                                exact
+                                path="/player/:uuid"
+                                not={<Redirect to="/" />}
+                                is={<VideoPlayerPage />}
+                            />
+                            <AuthenticatedRoute
+                                exact
+                                path="/stream/:uuid"
+                                not={<Redirect to="/" />}
+                                is={<ReadyStreamPage />}
+                            />
                         </>
                     )}
                 />

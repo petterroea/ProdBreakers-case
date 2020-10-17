@@ -6,6 +6,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Blackboard } from '@styled-icons/entypo/Blackboard';
 import { Description } from '@styled-icons/material-rounded/Description';
 import { historyObject as history } from '../../router/historyObject';
+import { useSelector } from 'react-redux';
+import { RootStateType } from '../../state/reducers';
 
 const Wrapper = styled.div`
     display: flex;
@@ -131,6 +133,8 @@ const Input = styled.input`
  * New Stream component
  */
 export const NewStream: React.FC = () => {
+    const authSelector = useSelector((state: RootStateType) => state.authentication);
+
     const validationSchema = React.useMemo(
         () =>
             yup.object({
@@ -143,19 +147,23 @@ export const NewStream: React.FC = () => {
     const { handleSubmit, register, errors } = useForm({ resolver: yupResolver(validationSchema) });
 
     const onSubmit = handleSubmit(async (data) => {
-        console.log(data);
+        console.log(authSelector);
         const response = await fetch('/api/lecture', {
-            method: 'POST',
+            method: 'PUT',
             mode: 'cors',
             cache: 'no-cache',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${'hi'}`,
+                Authorization: `Bearer ${authSelector && authSelector.user && authSelector.user.token}`,
             },
             redirect: 'follow',
             referrerPolicy: 'no-referrer',
-            body: JSON.stringify(data),
+            body: JSON.stringify({
+                ...data,
+                start: new Date(),
+                end: new Date(),
+            }),
         });
 
         // If response is OK then return result
