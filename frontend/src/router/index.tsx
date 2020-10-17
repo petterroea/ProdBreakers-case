@@ -18,6 +18,7 @@ import { NewStream } from '../pages/newStream';
 
 const Body = styled.div`
     height: Calc(100% - 80px);
+    width: 100%;
     display: flex;
     position: relative;
 `;
