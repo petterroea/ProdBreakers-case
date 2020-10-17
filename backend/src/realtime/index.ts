@@ -7,10 +7,21 @@ import { getLectureRepository, getCommentRepository } from '../database';
 
 import { streamStartHandler, streamEndHandler } from './stream'
 
+interface RunningStream {
+	uuid: string;
+	startTime: Date;
+}
+
+const fancyFilter = (streams: RunningStream[], uuid: string) => {
+	return streams.filter((runningStream) => {
+		return runningStream.uuid === uuid
+	})
+}
+
 export const initializeRealtimeComponent= (http) => {
 	let io = socket(http);
 
-	let runningStreams = []
+	let runningStreams = [] as RunningStream[]
 
 	const chatHandler = async (socket, data) => {
 		const { uuid, message } = data
@@ -29,8 +40,9 @@ export const initializeRealtimeComponent= (http) => {
 	const joinHandler = async (socket, data) => {
 		const { uuid } = data
 		socket.join(uuid)
-		if(runningStreams.includes(uuid)) {
-			socket.emit('streamStart', {path: `/live/${uuid}`})
+		const existingStream = fancyFilter(runningStreams, uuid)
+		if(existingStream.length != 0) {
+			socket.emit('streamStart', {path: `/live/${uuid}`, startTime: existingStream[0].startTime})
 		}
 		console.log(`User joined ${uuid}`)
 	}
@@ -45,10 +57,13 @@ export const initializeRealtimeComponent= (http) => {
 			await streamStartHandler(uuid)
 
 			//Finally, send update
-			io.to(uuid).emit('streamStart', {path: data.StreamPath})
+			io.to(uuid).emit('streamStart', {path: data.StreamPath, startTime: new Date()})
 
-			if(!runningStreams.includes(uuid)) {
-				runningStreams.push(uuid)
+			if(fancyFilter(runningStreams, uuid).length === 0) {
+				runningStreams.push({
+					uuid: uuid,
+					startTime: new Date()
+				})
 			}
 		})
 		socket.on('streamEnd', async (data) => {
@@ -57,7 +72,7 @@ export const initializeRealtimeComponent= (http) => {
 			await streamEndHandler(uuid)
 			console.log("Sending stream end")
 			runningStreams = runningStreams.filter((entry) => {
-				return entry !== uuid
+				return entry.uuid !== uuid
 			})
 			io.to(uuid).emit('streamEnd', {path: data.StreamPath})
 		} )
