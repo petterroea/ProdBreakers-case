@@ -7,6 +7,7 @@ import { setupDatabaseConection } from './database'
 
 import userRouter from './routes/userRouter';
 import lectureRouter from './routes/lectureRouter';
+import loginRouter from './routes/loginRouter';
 
 import { dbConfig } from './config'
 
@@ -18,7 +19,7 @@ const setupApp = (): express.Application => {
 	app.use(cors());
 
 	app.use('/api/lecture', lectureRouter);
-
+	app.use('/login', loginRouter);
 	app.use((_req, _res, next) => {
 	  next(createError(404));
 	});
