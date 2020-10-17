@@ -8,6 +8,7 @@ import { historyObject } from './historyObject';
 import { Splash } from '../pages/splash';
 import { Login } from '../pages/login';
 import { Register } from '../pages/register';
+import { VideoPlayerPage } from '../pages/player';
 
 export const RouterComponent: React.FC = () => {
     return (
@@ -16,6 +17,7 @@ export const RouterComponent: React.FC = () => {
                 <Route exact path="/" component={Splash} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
+                <Route exact path="/player/:uuid" component={VideoPlayerPage} />
             </Switch>
         </Router>
     );

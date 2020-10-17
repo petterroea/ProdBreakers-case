@@ -8,7 +8,7 @@ let DbConnection: Connection|null = null;
 let LectureRepository: Repository<Lecture>|null = null;
 let UserRepository: Repository<User>|null = null;
 
-export const setupDatabaseConection = async (connectionConfig) => {
+export const setupDatabaseConnection = async (connectionConfig) => {
 	await createConnections(connectionConfig)
 	DbConnection = getConnectionManager().get()
 	LectureRepository = DbConnection.getRepository(Lecture)
