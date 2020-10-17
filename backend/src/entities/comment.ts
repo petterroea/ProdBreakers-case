@@ -31,7 +31,7 @@ export class Comment {
             nullable: true
         }
     )
-    lecture: Lecture
+    lecture: Lecture|null
 
     @Column({type: 'text', nullable: true})
     title?: string
