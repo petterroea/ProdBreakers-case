@@ -38,7 +38,7 @@ const setupApp = (): express.Application => {
 
 	app.set('port', port);
 
-	return app
+	return app;
 }
 
 
