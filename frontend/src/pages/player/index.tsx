@@ -120,6 +120,18 @@ export const VideoPlayerPage: React.FC = () => {
                 setChatMessages((prev) => [...prev, data]);
             });
 
+            socket.on('streamStart', (data: any) => {
+                console.log('Stream start');
+                console.log(data);
+                setChatMessages((prev) => [...prev, data]);
+            });
+
+            socket.on('streamEnd', (data: any) => {
+                console.log('Stream end');
+                console.log(data);
+                setChatMessages((prev) => [...prev, data]);
+            });
+
             setLoading(false);
         };
 
