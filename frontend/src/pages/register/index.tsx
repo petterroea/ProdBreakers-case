@@ -6,6 +6,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { User } from '@styled-icons/fa-solid/User';
 import { UnlockAlt } from '@styled-icons/fa-solid/UnlockAlt';
 import { historyObject as history } from '../../router/historyObject';
+import { useDispatch } from 'react-redux';
+import { userActions } from '../../state/actions/user';
+import { UserRequest } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -148,6 +151,8 @@ const Input = styled.input`
  * Splash component for greetings useer
  */
 export const Register: React.FC = () => {
+    const dispatch = useDispatch();
+
     const validationSchema = React.useMemo(
         () =>
             yup.object({
@@ -166,7 +171,8 @@ export const Register: React.FC = () => {
     const { handleSubmit, register, errors } = useForm({ resolver: yupResolver(validationSchema) });
 
     const onSubmit = handleSubmit((data) => {
-        console.log(data);
+        const user = data as UserRequest;
+        dispatch(userActions.register(user));
     });
 
     const toLogin = (e: React.SyntheticEvent) => {
