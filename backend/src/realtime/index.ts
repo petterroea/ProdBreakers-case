@@ -1,8 +1,11 @@
 import socket from 'socket.io';
 
 import { Lecture } from '../entities/lecture'
+import { Recording } from '../entities/recording'
 import { Comment } from '../entities/comment'
 import { getLectureRepository, getCommentRepository } from '../database';
+
+import { streamStartHandler, streamEndHandler } from './stream'
 
 export const initializeRealtimeComponent= (http) => {
 	let io = socket(http);
@@ -37,44 +40,25 @@ export const initializeRealtimeComponent= (http) => {
 		socket.on('chat', (data) => chatHandler(socket, data))
 		socket.on('join', (data) => joinHandler(socket, data))
 		socket.on('streamStart', async (data) => {
-			console.log(`Stream started: ${JSON.stringify(data)}`)
-
 			const uuid = data.StreamPath.replace("/live/", "")
 			
-			const lecture = await getLectureRepository().findOne({where: {
-				uuid
-			}})
-			if(lecture === undefined) {
-				console.log("WARNING: Got stream start for unknown lecture")
-				return
-			}
-			lecture.streamRunning = true
-			await getLectureRepository().save(lecture)
+			await streamStartHandler(uuid)
+
 			//Finally, send update
 			io.to(uuid).emit('streamStart', {path: data.StreamPath})
 
 			runningStreams.push(uuid)
 		})
 		socket.on('streamEnd', async (data) => {
-			console.log(`Stream end: ${JSON.stringify(data)}`)
-
 			const uuid = data.StreamPath.replace("/live/", "")
 
-			const lecture = await getLectureRepository().findOne({where: {
-				uuid
-			}})
-			if(lecture === undefined) {
-				console.log("WARNING: Got stream start for unknown lecture")
-				return
-			}
-			lecture.streamRunning = false
-			await getLectureRepository().save(lecture)
+			await streamEndHandler(uuid)
 
 			io.to(uuid).emit('streamEnd', {path: data.StreamPath})
 			runningStreams.filter((entry) => {
 				return entry !== uuid
 			})
-		})
+		} )
 		socket.on('disconnect', () => {
 			console.log('user disconnected');
 		});

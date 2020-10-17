@@ -28,9 +28,6 @@ export class Lecture {
     @Column()
     start: Date
 
-    @Column({default: false})
-    streamRunning: boolean
-
     @Column()
     end: Date
 

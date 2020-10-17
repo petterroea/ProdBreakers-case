@@ -17,9 +17,13 @@ export class Recording {
     start: Date
 
     @Column({nullable: true})
+    fileName: string|null
+
+    @Column({nullable: true})
     end: Date|null
 
-    constructor() {
+    constructor(lecture) {
+        this.lecture = lecture
         this.start = new Date()
     }
 }

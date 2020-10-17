@@ -98,10 +98,11 @@ interface ChatMessage {
     uuid: string;
 }
 
-interface Vod {
+interface Recording {
+    start: string;
     uuid: string;
     fileName: string;
-    path: string;
+    end: string;
 }
 
 export const VideoPlayerPage: React.FC = () => {
@@ -111,7 +112,6 @@ export const VideoPlayerPage: React.FC = () => {
     const [notFound, setNotFound] = React.useState(false);
 
     const [chatMessages, setChatMessages] = React.useState([] as ChatMessage[]);
-    const [vodList, setVodList] = React.useState([] as Vod[]);
 
     const [socket, setSocket] = React.useState({} as typeof Socket);
 
@@ -143,11 +143,6 @@ export const VideoPlayerPage: React.FC = () => {
                 return;
             }
             setLectureObj(await response.json());
-
-            const vodReq = await fetch(`/api/lecture/${uuid}/vods`);
-            if (vodReq.status === 200) {
-                setVodList(await vodReq.json());
-            }
 
             socket.emit('join', { uuid });
 
@@ -214,12 +209,16 @@ export const VideoPlayerPage: React.FC = () => {
                     </CommentEntry>
                 </CommentField>
             </WrapperTwo>
-            {vodList.length !== 0 ? (
+            {lectureObj.recordings.length !== 0 ? (
                 <VodList>
                     <h1>Earlier recordings</h1>
                     <VodFlex>
-                        {vodList.map((vodObj) => {
-                            return <VodEntry key={vodObj.fileName}>{vodObj.fileName}</VodEntry>;
+                        {lectureObj.recordings.map((recording: Recording) => {
+                            return (
+                                <VodEntry key={`/vods/live/${uuid}/${recording.fileName}`}>
+                                    {recording.fileName}
+                                </VodEntry>
+                            );
                         })}
                     </VodFlex>
                 </VodList>
