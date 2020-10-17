@@ -2,23 +2,28 @@ import express from 'express';
 import cors from 'cors';
 import createError from 'http-errors';
 import http from 'http';
+import bodyParser from 'body-parser';
 
-import { setupDatabaseConection } from './database'
+import { setupDatabaseConnection } from './database';
+import { initializeRealtimeComponent } from './realtime';
 
 import userRouter from './routes/userRouter';
 import lectureRouter from './routes/lectureRouter';
+import commentRouter from './routes/commentRouter';
 
-import { dbConfig } from './config'
-
+import { dbConfig } from './config';
 
 const port = process.env.PORT || '9000';
 
 const setupApp = (): express.Application => {
 	const app = express();
 	app.use(cors());
+	app.use(bodyParser());
 
+  app.use('/api/user', userRouter);
 	app.use('/api/lecture', lectureRouter);
-
+	app.use('/api/comment', commentRouter);
+	
 	app.use((_req, _res, next) => {
 	  next(createError(404));
 	});
@@ -36,12 +41,13 @@ const setupApp = (): express.Application => {
 
 	app.set('port', port);
 
-	return app
+	return app;
 }
 
 
-setupDatabaseConection(dbConfig).then(() => {
+setupDatabaseConnection(dbConfig).then(() => {
 	const server = http.createServer(setupApp());
+	initializeRealtimeComponent(server)
 
 	server.listen(port);
 

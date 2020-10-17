@@ -1,5 +1,7 @@
 console.log("Hello, world")
 const NodeMediaServer = require('node-media-server');
+
+const io = require('socket.io-client');
  
 const config = {
   rtmp: {
@@ -25,6 +27,20 @@ const config = {
     ]
   }
 };
+//Connect socket
+
+const connection = io('http://server:9000')
  
 var nms = new NodeMediaServer(config)
 nms.run();
+
+
+nms.on('prePublish', (id, StreamPath, args) => {
+  console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  connection.emit('streamStart', {StreamPath})
+});
+
+nms.on('donePublish', (id, StreamPath, args) => {
+  console.log('[NodeEvent on donePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  connection.emit('streamEnd', {StreamPath})
+});

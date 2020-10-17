@@ -13,7 +13,7 @@ export enum UserType {
 @Entity({})
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    id: string
+    uuid: string
 
     @OneToMany(
         type => Lecture,
