@@ -8,7 +8,7 @@ import { User } from '@styled-icons/fa-solid/User';
 import { UnlockAlt } from '@styled-icons/fa-solid/UnlockAlt';
 import { historyObject as history } from '../../router/historyObject';
 import { Controlls } from './Controlls';
-import videojs from 'video.js';
+import videojs, { VideoJsPlayer } from 'video.js';
 
 import socketIOClient from 'socket.io-client';
 
@@ -40,18 +40,20 @@ interface VideoPlayerProps {
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps) => {
     const videoRef = React.useRef<HTMLVideoElement | null>(null);
+    const [player, setPlayer] = React.useState<VideoJsPlayer | null>(null);
 
     const url = props.vod || props.stream;
 
     React.useEffect(() => {
-        if (url) {
-            const player = videojs(videoRef.current, undefined, () => {
+        if (url && videoRef.current) {
+            if (!player) {
+                const _player = videojs(videoRef.current, undefined, () => {
+                    _player.src(url);
+                });
+                setPlayer(_player);
+            } else {
                 player.src(url);
-            });
-
-            return () => {
-                player.dispose();
-            };
+            }
         }
     }, [url]);
 
@@ -64,7 +66,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps)
                     <div data-vjs-player>
                         <Video ref={videoRef} className="video-js vjs-16-9" playsInline />
                     </div>
-                    <Controlls isStream={!!props.stream && !props.vod} videoRef={videoRef} />
+                    <Controlls url={url} isStream={!!props.stream && !props.vod} videoRef={videoRef} />
                 </>
             )}
         </Wrapper>

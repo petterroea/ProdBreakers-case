@@ -60,13 +60,18 @@ const SliderComments = styled.div`
 interface ControllsProps {
     videoRef: React.MutableRefObject<HTMLVideoElement | null>;
     isStream: boolean;
+    url: string | null;
 }
 
-export const Controlls: React.FC<ControllsProps> = ({ videoRef, isStream }) => {
+export const Controlls: React.FC<ControllsProps> = ({ videoRef, isStream, url }) => {
     const [min, setMin] = React.useState(0);
     const [max, setMax] = React.useState(0);
     const [isPaused, setIsPaused] = React.useState(true);
     const [currentTime, setCurrentTime] = React.useState(0);
+
+    React.useEffect(() => {
+        setIsPaused(true);
+    }, [url]);
 
     React.useEffect(() => {
         if (videoRef.current) {

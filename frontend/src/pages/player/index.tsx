@@ -167,7 +167,6 @@ export const VideoPlayerPage: React.FC = () => {
 
             socket.on('streamStart', (data: any) => {
                 const streamUrl = `http://localhost:8000${data.path}/index.m3u8`;
-                //const streamUrl = `http://localhost:8000${data.path}.flv`
                 console.log(`Setting stream url: ${streamUrl}`);
                 setStreamUrl(streamUrl);
             });
@@ -237,7 +236,10 @@ export const VideoPlayerPage: React.FC = () => {
                     <VodFlex>
                         {vodList.map((vodObj) => {
                             return (
-                                <VodEntry key={vodObj.fileName} onClick={() => setVodUrl(vodObj.path)}>
+                                <VodEntry
+                                    key={vodObj.fileName}
+                                    onClick={() => setVodUrl('http://localhost:3000' + vodObj.path)}
+                                >
                                     {vodObj.fileName}
                                 </VodEntry>
                             );
