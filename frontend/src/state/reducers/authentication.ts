@@ -2,7 +2,7 @@ import { userConstants, UserState, UserTypes } from '../constants/user';
 
 const defaultState = {
     loggingIn: false,
-    loggedIn: true,
+    loggedIn: false,
     registering: false,
     loggingOut: false,
 };
