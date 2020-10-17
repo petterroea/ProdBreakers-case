@@ -1,8 +1,11 @@
 import socket from 'socket.io';
 
 import { Lecture } from '../entities/lecture'
+import { Recording } from '../entities/recording'
 import { Comment } from '../entities/comment'
 import { getLectureRepository, getCommentRepository } from '../database';
+
+import { streamStartHandler, streamEndHandler } from './stream'
 
 export const initializeRealtimeComponent= (http) => {
 	let io = socket(http);
@@ -19,7 +22,7 @@ export const initializeRealtimeComponent= (http) => {
 			const chat = new Comment(null, message, lecture)
 			await getCommentRepository().save(chat)
 
-			io.to(uuid).emit('chat', { user: 'bob', message, uuid: chat.uuid, postedDate: chat.postedDate  })
+			io.to(uuid).emit('chat', { user: 'bob', body: message, uuid: chat.uuid, postedDate: chat.postedDate  })
 		}
 	}
 
@@ -36,23 +39,28 @@ export const initializeRealtimeComponent= (http) => {
 		console.log('a user connected');
 		socket.on('chat', (data) => chatHandler(socket, data))
 		socket.on('join', (data) => joinHandler(socket, data))
-		socket.on('streamStart', (data) => {
-			console.log(`Stream started: ${JSON.stringify(data)}`)
-
+		socket.on('streamStart', async (data) => {
 			const uuid = data.StreamPath.replace("/live/", "")
+			
+			await streamStartHandler(uuid)
+
+			//Finally, send update
 			io.to(uuid).emit('streamStart', {path: data.StreamPath})
 
-			runningStreams.push(uuid)
+			if(!runningStreams.includes(uuid)) {
+				runningStreams.push(uuid)
+			}
 		})
-		socket.on('streamEnd', (data) => {
-			console.log(`Stream end: ${JSON.stringify(data)}`)
-
+		socket.on('streamEnd', async (data) => {
 			const uuid = data.StreamPath.replace("/live/", "")
-			io.to(uuid).emit('streamEnd', {path: data.StreamPath})
-			runningStreams.filter((entry) => {
+
+			await streamEndHandler(uuid)
+			console.log("Sending stream end")
+			runningStreams = runningStreams.filter((entry) => {
 				return entry !== uuid
 			})
-		})
+			io.to(uuid).emit('streamEnd', {path: data.StreamPath})
+		} )
 		socket.on('disconnect', () => {
 			console.log('user disconnected');
 		});

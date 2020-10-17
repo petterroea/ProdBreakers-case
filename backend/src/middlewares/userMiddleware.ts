@@ -7,7 +7,7 @@ const JWT_KEY = process.env.JWT_KEY ?? 'flugelhorn';
 const userMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
   try {
-    if (authorization && authorization.startswith('Bearer ')) {
+    if (authorization && authorization.startsWith('Bearer ')) {
       const token = authorization.substring(7);
       const payload = jwt.verify(token, JWT_KEY);
       const { userId } = payload;

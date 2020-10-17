@@ -30,16 +30,16 @@ const WrapperTwo = styled.div`
 `;
 
 const CommentField = styled.div`
-    min-width: 30em;
+    flex: 1;
+    max-width: 500px;
     min-height: 30em;
-
-    overflow-y: auto;
 
     border: 1px solid rgba(0, 0, 0, 0.2);
     padding: 1em;
 
     display: flex;
     flex-direction: column;
+    margin-left: 20px;
 `;
 
 const CommentHeader = styled.h3``;
@@ -47,7 +47,8 @@ const CommentHeader = styled.h3``;
 const CommentUserName = styled.h5``;
 
 const CommentBody = styled.div`
-    height: 100%;
+    max-height: 20em;
+    overflow-y: auto;
 `;
 
 const CommentEntry = styled.div`
@@ -69,6 +70,7 @@ const Input = styled.input`
 
 const VodList = styled.div`
     width: 80%;
+    overflow: auto;
 `;
 const VodFlex = styled.div`
     display: flex;
@@ -78,23 +80,31 @@ const VodEntry = styled.div`
     padding: 1em;
     border: 1px solid #ddd;
     overflow-x: auto;
-    width: 10em;
+    min-width: 10em;
     :hover {
         background-color: #eee;
         cursor: pointer;
     }
 `;
 
+const CommentWrapper = styled.div`
+    border-bottom: 1px solid #ddd;
+    p {
+        margin: 0.2em;
+    }
+`;
+
 interface ChatMessage {
     user: string;
-    message: string;
+    body: string;
     uuid: string;
 }
 
-interface Vod {
+interface Recording {
+    start: string;
     uuid: string;
     fileName: string;
-    path: string;
+    end: string;
 }
 
 export const VideoPlayerPage: React.FC = () => {
@@ -104,9 +114,13 @@ export const VideoPlayerPage: React.FC = () => {
     const [notFound, setNotFound] = React.useState(false);
 
     const [chatMessages, setChatMessages] = React.useState([] as ChatMessage[]);
-    const [vodList, setVodList] = React.useState([] as Vod[]);
 
     const [socket, setSocket] = React.useState({} as typeof Socket);
+
+    //Stream state
+    const [streamEnded, setStreamEnded] = React.useState(false);
+    const [streamUrl, setStreamUrl] = React.useState(null as null | string);
+    const [vodUrl, setVodUrl] = React.useState(null as null | string);
 
     const validationSchema = React.useMemo(
         () =>
@@ -137,9 +151,9 @@ export const VideoPlayerPage: React.FC = () => {
             }
             setLectureObj(await response.json());
 
-            const vodReq = await fetch(`/api/lecture/${uuid}/vods`);
-            if (vodReq.status === 200) {
-                setVodList(await vodReq.json());
+            const messages = await fetch(`/api/comment/lecture/${uuid}`);
+            if (response.status === 200) {
+                setChatMessages(await messages.json());
             }
 
             socket.emit('join', { uuid });
@@ -151,13 +165,15 @@ export const VideoPlayerPage: React.FC = () => {
             });
 
             socket.on('streamStart', (data: any) => {
-                console.log('Stream start');
-                console.log(data);
+                const streamUrl = `http://localhost:8000${data.path}/index.m3u8`;
+                console.log(`Setting stream url: ${streamUrl}`);
+                setStreamUrl(streamUrl);
             });
 
             socket.on('streamEnd', (data: any) => {
                 console.log('Stream end');
                 console.log(data);
+                setStreamEnded(true);
             });
 
             setLoading(false);
@@ -185,12 +201,25 @@ export const VideoPlayerPage: React.FC = () => {
         <Wrapper>
             <h2>{lectureObj.name}</h2>
             <WrapperTwo>
-                <VideoPlayer uuid={uuid}></VideoPlayer>
+                <VideoPlayer
+                    uuid={uuid}
+                    ended={streamEnded}
+                    stream={streamUrl}
+                    vod={vodUrl}
+                    chats={chatMessages}
+                ></VideoPlayer>
                 <CommentField key={1}>
                     <CommentHeader>Comments</CommentHeader>
                     <CommentBody>
                         {chatMessages.map((message) => {
-                            return <p key={message.uuid}>{message.message}</p>;
+                            return (
+                                <CommentWrapper key={message.uuid}>
+                                    <p>
+                                        <b>{message.user}</b>
+                                    </p>
+                                    <p>{message.body}</p>
+                                </CommentWrapper>
+                            );
                         })}
                     </CommentBody>
                     <CommentEntry>
@@ -200,12 +229,21 @@ export const VideoPlayerPage: React.FC = () => {
                     </CommentEntry>
                 </CommentField>
             </WrapperTwo>
-            {vodList.length !== 0 ? (
+            {lectureObj.recordings.length !== 0 ? (
                 <VodList>
-                    <h1>Vods</h1>
+                    <h1>Earlier recordings</h1>
                     <VodFlex>
-                        {vodList.map((vodObj) => {
-                            return <VodEntry key={vodObj.fileName}>{vodObj.fileName}</VodEntry>;
+                        {lectureObj.recordings.map((recording: Recording) => {
+                            return (
+                                <VodEntry
+                                    key={`/vods/live/${uuid}/${recording.fileName}`}
+                                    onClick={() =>
+                                        setVodUrl(`http://localhost:3000/vods/live/${uuid}/` + recording.fileName)
+                                    }
+                                >
+                                    {recording.fileName}
+                                </VodEntry>
+                            );
                         })}
                     </VodFlex>
                 </VodList>
