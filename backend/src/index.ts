@@ -4,6 +4,7 @@ import createError from 'http-errors';
 import http from 'http';
 
 import { setupDatabaseConection } from './database'
+import { initializeRealtimeComponent } from './realtime'
 
 import userRouter from './routes/userRouter';
 import lectureRouter from './routes/lectureRouter';
@@ -42,6 +43,7 @@ const setupApp = (): express.Application => {
 
 setupDatabaseConection(dbConfig).then(() => {
 	const server = http.createServer(setupApp());
+	initializeRealtimeComponent(server)
 
 	server.listen(port);
 
