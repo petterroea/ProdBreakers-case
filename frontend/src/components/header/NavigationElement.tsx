@@ -6,8 +6,8 @@ interface StyledElementProps {
 }
 
 const Element = styled.div<StyledElementProps>`
-    color: ${(props) => (props.selected ? 'blue' : 'white')};
-    border-bottom: solid 4px ${(props) => (props.selected ? 'blue' : 'transparent')};
+    color: ${(props) => (props.selected ? '#6FE9FF' : 'white')};
+    border-bottom: solid 4px ${(props) => (props.selected ? '#6FE9FF' : 'transparent')};
     font-weight: bold;
     font-size: 22px;
     line-height: 31px;
