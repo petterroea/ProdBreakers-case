@@ -3,13 +3,13 @@ import cors from 'cors';
 import createError from 'http-errors';
 import http from 'http';
 
-import { setupDatabaseConection } from './database'
+import { setupDatabaseConnection } from './database';
 
 import userRouter from './routes/userRouter';
 import lectureRouter from './routes/lectureRouter';
 import loginRouter from './routes/loginRouter';
 
-import { dbConfig } from './config'
+import { dbConfig } from './config';
 
 
 const port = process.env.PORT || '9000';
@@ -41,7 +41,7 @@ const setupApp = (): express.Application => {
 }
 
 
-setupDatabaseConection(dbConfig).then(() => {
+setupDatabaseConnection(dbConfig).then(() => {
 	const server = http.createServer(setupApp());
 
 	server.listen(port);
