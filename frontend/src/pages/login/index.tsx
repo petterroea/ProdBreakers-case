@@ -90,6 +90,7 @@ const InputWrapper = styled.div`
 const ButtonsWrapper = styled.div`
     width: 100%;
     display: flex;
+    flex-direction: row-reverse;
     flex-wrap: wrap;
     justify-content: space-between;
     @media only screen and (max-width: 800px) {
@@ -193,19 +194,23 @@ export const Login: React.FC = () => {
                             <span>Username</span>
                             <InputWrapper>
                                 <Person size="1em" />
-                                <Input name="username" ref={register} />
+                                <Input name="username" ref={register} tabIndex={1} />
                             </InputWrapper>
                         </EmailWrapper>
                         <PasswordWrapper>
                             <span>Password</span>
                             <InputWrapper>
                                 <UnlockAlt size="1em" />
-                                <Input name="password" type="password" ref={register} />
+                                <Input name="password" type="password" ref={register} tabIndex={2} />
                             </InputWrapper>
                         </PasswordWrapper>
                         <ButtonsWrapper>
-                            <ToRegisterButton onClick={toRegister}>To Register</ToRegisterButton>
-                            <LoginButton type="submit">Login</LoginButton>
+                            <LoginButton type="submit" tabIndex={3}>
+                                Login
+                            </LoginButton>
+                            <ToRegisterButton onClick={toRegister} tabIndex={4}>
+                                To Register
+                            </ToRegisterButton>
                         </ButtonsWrapper>
                     </LoginForm>
                 </Wrapper2>

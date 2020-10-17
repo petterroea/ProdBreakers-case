@@ -90,6 +90,7 @@ const InputWrapper = styled.div`
 const ButtonsWrapper = styled.div`
     width: 100%;
     display: flex;
+    flex-direction: row-reverse;
     flex-wrap: wrap;
     justify-content: space-between;
     @media only screen and (max-width: 800px) {
@@ -213,8 +214,8 @@ export const Register: React.FC = () => {
                             </InputWrapper>
                         </PasswordWrapper>
                         <ButtonsWrapper>
-                            <ToLoginButton onClick={toLogin}>To Login</ToLoginButton>
                             <RegisterButton type="submit">Register</RegisterButton>
+                            <ToLoginButton onClick={toLogin}>To Login</ToLoginButton>
                         </ButtonsWrapper>
                     </LoginForm>
                 </Wrapper2>
