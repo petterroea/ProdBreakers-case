@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 
 import MessageList from '../messageList'
 
-export type Lecture = {
-    name: string,
-    uuid: string,
-    isLive: boolean,
+export interface Lecture {
+    name: string;
+    uuid: string;
+    isLive: boolean;
+    onClick: () => void;
 }
 
 const Info = styled.p`
@@ -18,12 +19,13 @@ const Link = styled.a`
     display: block;
 `;
 
-export const LectureEntry: React.FC<Lecture> = (props: Lecture) => {
-    const link: string = "/api/lecture/" + props.uuid;
+export const LectureEntry: React.FC<Lecture> = ({name, uuid, isLive,onClick}) => {
+    const link: string = "/api/lecture/" + uuid;
+
     return (
-        <Link href={link}>
-            <Info className='lectureName'>name: {props.name}</Info>
-            <Info className='lectureStreamState'>live: {props.isLive}</Info>
+        <Link href={link} onClick={onClick} >
+            <Info className='lectureName'>name: {name}</Info>
+            <Info className='lectureStreamState'>live: {isLive}</Info>
         </Link>
     )
 }
@@ -33,12 +35,17 @@ type LectureListProps = {
 };
 
 export const LectureList: React.FC<LectureListProps> = (props: LectureListProps) => {
-    const [currentLecture, setCurrentLecture] = useState(""); // UUID
+    const [currentLecture, setCurrentLecture] = React.useState(""); // UUID
+
+    const onClick = (lecture: string) => {
+        console.log("New main lecture: "+ lecture);
+        setCurrentLecture(lecture);
+    }
     return (
         <div>
             <div>
                 {props.lectures.map(lecture=>(
-                    <LectureEntry name = {lecture.name} isLive = {lecture.isLive} uuid = {lecture.uuid} />
+                    <LectureEntry name = {lecture.name} isLive = {lecture.isLive} uuid = {lecture.uuid} onClick = {() => {onClick(lecture.uuid)}}/>
                 ))}
             </div>
             <div>
