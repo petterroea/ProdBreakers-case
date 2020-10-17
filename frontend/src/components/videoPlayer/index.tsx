@@ -23,17 +23,18 @@ const Slider = styled.input`
     width: 100%;
 `;
 
-interface Comment {
+interface ChatMessage {
     user: string;
     message: string;
+    uuid: string;
 }
 
 interface VideoPlayerProps {
     uuid: string;
-    onStreamStart: (streamUrl: string, comments: Array<Comment>) => void;
-    onVodStart: (vodUrl: string, comments: Array<Comment>) => void;
-    onStreamEnd: () => void;
-    onNewComment: (comment: Comment) => void;
+    ended: boolean;
+    stream: string | null;
+    vod: string | null;
+    chats: Array<ChatMessage>;
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = (props: VideoPlayerProps) => {
