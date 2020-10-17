@@ -85,6 +85,13 @@ const VodEntry = styled.div`
     }
 `;
 
+const CommentWrapper = styled.div`
+    border-bottom: 1px solid #ddd;
+    p {
+        margin: 0.2em;
+    }
+`;
+
 interface ChatMessage {
     user: string;
     message: string;
@@ -190,7 +197,14 @@ export const VideoPlayerPage: React.FC = () => {
                     <CommentHeader>Comments</CommentHeader>
                     <CommentBody>
                         {chatMessages.map((message) => {
-                            return <p key={message.uuid}>{message.message}</p>;
+                            return (
+                                <CommentWrapper key={message.uuid}>
+                                    <p>
+                                        <b>{message.user}</b>
+                                    </p>
+                                    <p>{message.message}</p>
+                                </CommentWrapper>
+                            );
                         })}
                     </CommentBody>
                     <CommentEntry>
@@ -202,7 +216,7 @@ export const VideoPlayerPage: React.FC = () => {
             </WrapperTwo>
             {vodList.length !== 0 ? (
                 <VodList>
-                    <h1>Vods</h1>
+                    <h1>Earlier recordings</h1>
                     <VodFlex>
                         {vodList.map((vodObj) => {
                             return <VodEntry key={vodObj.fileName}>{vodObj.fileName}</VodEntry>;
