@@ -118,6 +118,8 @@ export const Controlls: React.FC<ControllsProps> = ({ videoRef, isStream, url, s
 
     const duration = endTime.getTime() - startTime.getTime();
 
+    const commentSpacing = duration / 30000 < 4 ? 4 : duration / 30000;
+
     React.useEffect(() => {
         setIsPaused(true);
     }, [url]);
@@ -191,10 +193,10 @@ export const Controlls: React.FC<ControllsProps> = ({ videoRef, isStream, url, s
         const normalizedTime = (chatTime.getTime() - startTime.getTime()) / 1000;
 
         if (isStream) {
-            return Math.abs(endTime.getTime() - normalizedTime) < 3;
+            return Math.abs(endTime.getTime() - normalizedTime) < commentSpacing;
         } else {
             if (videoRef !== null && videoRef.current !== null) {
-                return Math.abs(videoRef.current.currentTime - normalizedTime) < 3;
+                return Math.abs(videoRef.current.currentTime - normalizedTime) < commentSpacing;
             }
         }
 
