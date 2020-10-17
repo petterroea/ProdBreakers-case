@@ -68,7 +68,21 @@ const Input = styled.input`
 `;
 
 const VodList = styled.div`
-    width: 100%;
+    width: 80%;
+`;
+const VodFlex = styled.div`
+    display: flex;
+`;
+
+const VodEntry = styled.div`
+    padding: 1em;
+    border: 1px solid #ddd;
+    overflow-x: auto;
+    width: 10em;
+    :hover {
+        background-color: #eee;
+        cursor: pointer;
+    }
 `;
 
 interface ChatMessage {
@@ -186,7 +200,16 @@ export const VideoPlayerPage: React.FC = () => {
                     </CommentEntry>
                 </CommentField>
             </WrapperTwo>
-            {vodList.length !== 0 ? <VodList>There are vods</VodList> : null}
+            {vodList.length !== 0 ? (
+                <VodList>
+                    <h1>Vods</h1>
+                    <VodFlex>
+                        {vodList.map((vodObj) => {
+                            return <VodEntry key={vodObj.fileName}>{vodObj.fileName}</VodEntry>;
+                        })}
+                    </VodFlex>
+                </VodList>
+            ) : null}
             <div>
                 {lectureObj.description.split('\n').map((line: string, index: number) => {
                     return <p key={index}>{line}</p>;
