@@ -57,4 +57,3 @@ export const LectureList: React.FC<LectureListProps> = (props: LectureListProps)
 
 
     
-    
