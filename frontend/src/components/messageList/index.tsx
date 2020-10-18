@@ -8,6 +8,7 @@ const MessageList = (props: any) => {
     const currentLecture: string = props.lecture;
     const [messages, setMessages] = useState<Array<any>>([]);
     const [loading, setLoading] = useState(false);
+    const [commentBody, setCommentBody] = useState('');
 
     const authSelector = useSelector((state: RootStateType) => state.authentication);
     const token: string | undefined = authSelector.user?.token;
@@ -29,9 +30,33 @@ const MessageList = (props: any) => {
         }
     }, [currentLecture, token]);
 
+    const submit = async (e: any) => {
+        e.preventDefault();
+        const res = await fetch(`/api/comment/lecture/${currentLecture}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                body: commentBody,
+            }),
+        });
+        if (!res.ok) {
+            return;
+        }
+        const newComment = await res.json();
+        setMessages((prev) => [...prev, newComment]);
+        setCommentBody('');
+    };
+
     return (
         <div>
-            {loading ? messages.map((message: any) => <Thread key={message.uuid} message={message} />) : 'Loading...'}
+            {loading ? 'Loading...' : messages.map((message: any) => <Thread key={message.uuid} message={message} />)}
+            <form onSubmit={submit}>
+                <input type="text" value={commentBody} onChange={(e) => setCommentBody(e.target.value)} />
+                <input type="submit" value="Comment" />
+            </form>
         </div>
     );
 };

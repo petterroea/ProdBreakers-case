@@ -46,6 +46,7 @@ const Column = styled.div`
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin-right: 10px;
     float: left;
+    overflow: scroll;
 `;
 
 export const LectureEntry: React.FC<Lecture> = ({ name, uuid, isLive, onClick }) => {
