@@ -9,7 +9,6 @@ import { AuthenticatedRoute } from './AuthenticatedRoute';
 import { Header } from '../components/header';
 
 // Pages
-import { Splash } from '../pages/splash';
 import { Login } from '../pages/login';
 import { Register } from '../pages/register';
 import { VideoPlayerPage } from '../pages/player';
@@ -33,7 +32,12 @@ export const RouterComponent: React.FC = () => {
                         <>
                             <Header />
                             <Body>
-                                <Route exact path="/" component={Splash} />
+                                <AuthenticatedRoute
+                                    exact
+                                    path="/"
+                                    not={<Redirect to="/login" />}
+                                    is={<Redirect to="/lectures" />}
+                                />
                                 <AuthenticatedRoute exact path="/login" not={<Login />} is={<Redirect to="/" />} />
                                 <AuthenticatedRoute
                                     exact
