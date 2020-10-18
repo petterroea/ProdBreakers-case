@@ -5,8 +5,8 @@ import Thread from './Thread';
 import { RootStateType } from '../../state/reducers';
 
 const MessageList = (props: any) => {
-    const currentLecture: string = props.currentLecture;
-    const [messages, setMessages] = useState([]);
+    const currentLecture: string = props.lecture;
+    const [messages, setMessages] = useState(null as any[] | null);
 
     const authSelector = useSelector((state: RootStateType) => state.authentication);
     const token: string | undefined = authSelector.user?.token;
