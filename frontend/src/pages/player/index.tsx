@@ -22,6 +22,7 @@ const Wrapper = styled.div`
     width: 100%;
     align-items: center;
     justify-content: center;
+    overflow: auto;
 `;
 
 const WrapperTwo = styled.div`
@@ -30,12 +31,14 @@ const WrapperTwo = styled.div`
     flex-direction: row;
     align-items: stretch;
     flex-wrap: wrap;
+    overflow: auto;
 `;
 
 const CommentField = styled.div`
     flex: 1;
     max-width: 500px;
     min-height: 30em;
+    max-height: 90%;
 
     border: 1px solid rgba(0, 0, 0, 0.2);
     padding: 1em;
@@ -50,7 +53,6 @@ const CommentHeader = styled.h3``;
 const CommentUserName = styled.h5``;
 
 const CommentBody = styled.div`
-    max-height: 20em;
     overflow-y: auto;
 `;
 
@@ -88,6 +90,10 @@ const VodEntry = styled.div`
         background-color: #eee;
         cursor: pointer;
     }
+`;
+
+const VideoContaier = styled.div`
+    flex: 1;
 `;
 
 export const VideoPlayerPage: React.FC = () => {
@@ -193,13 +199,37 @@ export const VideoPlayerPage: React.FC = () => {
         <Wrapper>
             <h2>{lectureObj.name}</h2>
             <WrapperTwo>
-                <VideoPlayer
-                    uuid={uuid}
-                    ended={streamEnded}
-                    stream={stream}
-                    vod={vod}
-                    chats={chatMessages}
-                ></VideoPlayer>
+                <VideoContaier>
+                    <VideoPlayer
+                        uuid={uuid}
+                        ended={streamEnded}
+                        stream={stream}
+                        vod={vod}
+                        chats={chatMessages}
+                    ></VideoPlayer>
+                    {finishedRecordings.length !== 0 ? (
+                        <VodList>
+                            <h1>Earlier recordings</h1>
+                            <VodFlex>
+                                {finishedRecordings.map((recording: Recording) => {
+                                    return (
+                                        <VodEntry
+                                            key={`/vods/live/${uuid}/${recording.fileName}`}
+                                            onClick={() => setVod(recording)}
+                                        >
+                                            {recording.fileName}
+                                        </VodEntry>
+                                    );
+                                })}
+                            </VodFlex>
+                        </VodList>
+                    ) : null}
+                    <div>
+                        {lectureObj.description.split('\n').map((line: string, index: number) => {
+                            return <p key={index}>{line}</p>;
+                        })}
+                    </div>
+                </VideoContaier>
                 <CommentField key={1}>
                     <CommentHeader>Comments</CommentHeader>
                     <CommentBody>
@@ -214,28 +244,6 @@ export const VideoPlayerPage: React.FC = () => {
                     </CommentEntry>
                 </CommentField>
             </WrapperTwo>
-            {finishedRecordings.length !== 0 ? (
-                <VodList>
-                    <h1>Earlier recordings</h1>
-                    <VodFlex>
-                        {finishedRecordings.map((recording: Recording) => {
-                            return (
-                                <VodEntry
-                                    key={`/vods/live/${uuid}/${recording.fileName}`}
-                                    onClick={() => setVod(recording)}
-                                >
-                                    {recording.fileName}
-                                </VodEntry>
-                            );
-                        })}
-                    </VodFlex>
-                </VodList>
-            ) : null}
-            <div>
-                {lectureObj.description.split('\n').map((line: string, index: number) => {
-                    return <p key={index}>{line}</p>;
-                })}
-            </div>
         </Wrapper>
     );
 };
