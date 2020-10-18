@@ -114,11 +114,17 @@ export const Controlls: React.FC<ControllsProps> = ({ videoRef, isStream, url, s
     const [currentTime, setCurrentTime] = React.useState(0);
 
     const startTime = new Date(start);
-    const endTime = end ? new Date(end) : new Date();
+    let endTime = end ? new Date(end) : new Date();
+    if (!isStream) {
+        if (videoRef.current) {
+            endTime = new Date(startTime.getTime() + videoRef.current.duration * 1000);
+        }
+    }
 
     const duration = endTime.getTime() - startTime.getTime();
 
-    const commentSpacing = duration / 30000 < 4 ? 4 : duration / 30000;
+    //const commentSpacing = duration / 30000 < 4 ? 4 : duration / 30000;
+    const commentSpacing = 4;
 
     React.useEffect(() => {
         setIsPaused(true);

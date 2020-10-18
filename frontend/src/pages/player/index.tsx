@@ -7,6 +7,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { User } from '@styled-icons/fa-solid/User';
 import { UnlockAlt } from '@styled-icons/fa-solid/UnlockAlt';
 import { historyObject as history } from '../../router/historyObject';
+import { useSelector } from 'react-redux';
+
+import { RootStateType } from '../../state/reducers';
 
 import { VideoPlayer } from '../../components/videoPlayer';
 import { DisplayComment } from '../../components/displayComment';
@@ -92,6 +95,7 @@ const VodEntry = styled.div`
 
 export const VideoPlayerPage: React.FC = () => {
     const { uuid } = useParams();
+    const authentication = useSelector((state: RootStateType) => state.authentication);
 
     const [loading, setLoading] = React.useState(true);
     const [notFound, setNotFound] = React.useState(false);
@@ -130,6 +134,12 @@ export const VideoPlayerPage: React.FC = () => {
 
     React.useEffect(() => {
         const socket = socketIOClient();
+        if (authentication.loggedIn) {
+            const user = authentication.user;
+            if (user !== undefined) {
+                socket.emit('auth', { type: 'user', token: user.token });
+            }
+        }
         setSocket(socket);
 
         const metadataFetch = async () => {
@@ -208,9 +218,11 @@ export const VideoPlayerPage: React.FC = () => {
                         })}
                     </CommentBody>
                     <CommentEntry>
-                        <form onSubmit={onSubmit}>
-                            <Input name="message" ref={register} />
-                        </form>
+                        {authentication.loggedIn ? (
+                            <form onSubmit={onSubmit}>
+                                <Input name="message" ref={register} />
+                            </form>
+                        ) : null}
                     </CommentEntry>
                 </CommentField>
             </WrapperTwo>

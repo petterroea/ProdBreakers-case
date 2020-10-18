@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import { getUserRepository } from '../database';
 
-const JWT_KEY = process.env.JWT_KEY ?? 'flugelhorn';
+export const JWT_KEY = process.env.JWT_KEY ?? 'flugelhorn';
 
 const userMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
