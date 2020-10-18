@@ -50,7 +50,7 @@ export const LectureEntry: React.FC<Lecture> = ({ name, uuid, isLive, onClick })
     return (
         <LectureSelector onClick={onClick}>
             <Info>name: {name}</Info>
-            <Info>live: {isLive}</Info>
+            <Info>{isLive ? "Presentation is Live now!" : "This is a recording." }</Info>
         </LectureSelector>
     );
 };
