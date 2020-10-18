@@ -3,9 +3,17 @@ import { useSelector } from 'react-redux';
 
 import { RootStateType } from '../../state/reducers';
 
+type Reply = {
+    body: string;
+    postedDate: string;
+    title: string | null;
+    uuid: string;
+};
+
 const Replies = (props: any) => {
     const uuid: string = props.uuid;
-    const [replies, setReplies] = useState([]);
+    const [replies, setReplies] = useState<Array<Reply>>([]);
+    const [writtenReply, setWrittenReply] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -35,6 +43,27 @@ const Replies = (props: any) => {
         }
     }, [uuid]);
 
+    const postNewReply = async (e: any) => {
+        e.preventDefault();
+        const value: string = writtenReply;
+        const res = await fetch(`/api/comment/reply/${uuid}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                body: value,
+            }),
+        });
+        if (!res.ok) {
+            return;
+        }
+        const newReply: Reply = await res.json();
+        setReplies((prev) => [...prev, newReply]);
+        setWrittenReply('');
+    };
+
     if (error) {
         return (
             <div>
@@ -51,7 +80,7 @@ const Replies = (props: any) => {
     return (
         <div>
             {replies.length
-                ? replies.map((reply: { body: string; postedDate: string; title: string | null; uuid: string }) => {
+                ? replies.map((reply: Reply) => {
                       const { body, title, uuid } = reply;
                       return (
                           <div key={uuid}>
@@ -61,6 +90,10 @@ const Replies = (props: any) => {
                       );
                   })
                 : 'No replies'}
+            <form onSubmit={postNewReply}>
+                <input type="text" value={writtenReply} onChange={(e) => setWrittenReply(e.target.value)} />
+                <input type="submit" value="Reply" />
+            </form>
         </div>
     );
 };
