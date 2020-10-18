@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Navigation } from './Navigation';
 import { Link } from 'react-router-dom';
+import { CloudFill } from '@styled-icons/bootstrap/CloudFill';
 
 const StyledHeader = styled.header`
     width: 100%;
@@ -37,7 +38,9 @@ export const Header: React.FC = () => {
     return (
         <StyledHeader>
             <LogoWrapper to="/">
-                <Logo>Placeholder</Logo>
+                <Logo>
+                    Lecture <CloudFill size="1em" />
+                </Logo>
             </LogoWrapper>
             <Navigation />
         </StyledHeader>
