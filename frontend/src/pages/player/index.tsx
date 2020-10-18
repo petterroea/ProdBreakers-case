@@ -56,6 +56,7 @@ const CommentHeader = styled.h3``;
 const CommentUserName = styled.h5``;
 
 const CommentBody = styled.div`
+    flex: 1;
     overflow-y: auto;
 `;
 
