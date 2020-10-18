@@ -55,15 +55,28 @@ router.get('/lecture/:uuid', async (req, res) => {
 router.get('/reply/:uuid', async (req, res) => {
   try {
     const parentCommentUuid: string = req.params.uuid;
-    const parentComment: Comment = await getCommentRepository().findOne({where: {
-      uuid: parentCommentUuid,
-    }});
+    const parentComment: any = await getCommentRepository().findOne({
+      where: {
+        uuid: parentCommentUuid,
+      },
+    });
     if (!parentComment) {
       res.sendStatus(404);
       return;
     }
-    const replies = await getReplies(parentComment);
-    res.json(replies);
+    const replies = await getCommentRepository().find({
+      where: {
+        thread: parentComment,
+      },
+      relations: ['owner']
+    });
+    res.json(replies.map((comment) => {
+      if (comment.owner) {
+        (comment as any).user = comment.owner.fullName;
+        comment.owner = null;
+      }
+      return comment;
+    }));
   } catch (err) {
     res.sendStatus(500);
   }

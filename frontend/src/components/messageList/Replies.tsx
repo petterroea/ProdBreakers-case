@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 import { RootStateType } from '../../state/reducers';
+
+const Wrapper = styled.div`
+    margin-left: 2em;
+`;
 
 type Reply = {
     body: string;
     postedDate: string;
     title: string | null;
     uuid: string;
+    user: string;
 };
 
 const Replies = (props: any) => {
@@ -78,13 +84,15 @@ const Replies = (props: any) => {
     }
 
     return (
-        <div>
+        <Wrapper>
             {replies.length
                 ? replies.map((reply: Reply) => {
-                      const { body, title, uuid } = reply;
+                      const { body, uuid, user } = reply;
                       return (
                           <div key={uuid}>
-                              {title ? <h6>{title}</h6> : null}
+                              <p>
+                                  <b>{user}</b>
+                              </p>
                               <p>{`>${body}`}</p>
                           </div>
                       );
@@ -94,7 +102,7 @@ const Replies = (props: any) => {
                 <input type="text" value={writtenReply} onChange={(e) => setWrittenReply(e.target.value)} />
                 <input type="submit" value="Reply" />
             </form>
-        </div>
+        </Wrapper>
     );
 };
 
