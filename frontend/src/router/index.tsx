@@ -14,6 +14,7 @@ import { Register } from '../pages/register';
 import { VideoPlayerPage } from '../pages/player';
 import { ReadyStreamPage } from '../pages/stream';
 import { NewStream } from '../pages/newStream';
+import { JoinStream } from '../pages/joinStream';
 
 const Body = styled.div`
     height: Calc(100% - 80px);
@@ -50,6 +51,12 @@ export const RouterComponent: React.FC = () => {
                                     path="/new/stream"
                                     not={<Redirect to="/" />}
                                     is={<NewStream />}
+                                />
+                                <AuthenticatedRoute
+                                    exact
+                                    path="/join/stream"
+                                    not={<Redirect to="/" />}
+                                    is={<JoinStream />}
                                 />
                                 <AuthenticatedRoute
                                     exact
