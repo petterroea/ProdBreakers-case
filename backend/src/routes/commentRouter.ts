@@ -34,12 +34,20 @@ router.get('/:uuid', async (req, res) => {
 router.get('/lecture/:uuid', async (req, res) => {
   try {
     const lectureUuid: string = req.params.uuid;
-    const comments = await getCommentRepository().find({where: {
+    const comments = (await getCommentRepository().find({where: {
       lecture: lectureUuid,
       thread: null,
-    }});
+    },
+    relations: ['owner']})).map((comment) => {
+      if(comment.owner !== null) {
+        (comment as any).user = comment.owner.fullName
+        comment.owner = null
+      }
+      return comment;
+    });
     res.json(comments);
   } catch (err) {
+    console.log(err)
     res.sendStatus(500);
   }
 });

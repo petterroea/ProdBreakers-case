@@ -37,6 +37,7 @@ const config = {
 //Connect socket
 
 const connection = io('http://server:9000')
+connection.emit('auth', {type: "streamServer"})
  
 var nms = new NodeMediaServer(config)
 nms.run();
