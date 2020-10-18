@@ -30,7 +30,9 @@ const MessageList = (props: any) => {
     }, [currentLecture, token]);
 
     return (
-        <div>{messages?.map((message: any) => <Thread key={message.uuid} message={message} />) ?? 'Loading...'}</div>
+        <div>
+            {loading ? messages.map((message: any) => <Thread key={message.uuid} message={message} />) : 'Loading...'}
+        </div>
     );
 };
 
