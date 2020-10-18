@@ -9,12 +9,12 @@ import { AuthenticatedRoute } from './AuthenticatedRoute';
 import { Header } from '../components/header';
 
 // Pages
-import { Splash } from '../pages/splash';
 import { Login } from '../pages/login';
 import { Register } from '../pages/register';
 import { VideoPlayerPage } from '../pages/player';
 import { ReadyStreamPage } from '../pages/stream';
 import { NewStream } from '../pages/newStream';
+import { JoinStream } from '../pages/joinStream';
 
 const Body = styled.div`
     height: Calc(100% - 80px);
@@ -33,7 +33,12 @@ export const RouterComponent: React.FC = () => {
                         <>
                             <Header />
                             <Body>
-                                <Route exact path="/" component={Splash} />
+                                <AuthenticatedRoute
+                                    exact
+                                    path="/"
+                                    not={<Redirect to="/login" />}
+                                    is={<Redirect to="/lectures" />}
+                                />
                                 <AuthenticatedRoute exact path="/login" not={<Login />} is={<Redirect to="/" />} />
                                 <AuthenticatedRoute
                                     exact
@@ -46,6 +51,12 @@ export const RouterComponent: React.FC = () => {
                                     path="/new/stream"
                                     not={<Redirect to="/" />}
                                     is={<NewStream />}
+                                />
+                                <AuthenticatedRoute
+                                    exact
+                                    path="/join/stream"
+                                    not={<Redirect to="/" />}
+                                    is={<JoinStream />}
                                 />
                                 <AuthenticatedRoute
                                     exact
