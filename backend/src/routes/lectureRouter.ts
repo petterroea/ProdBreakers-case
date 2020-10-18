@@ -16,7 +16,9 @@ const censorUserMap = (user: User) => {
 lectureRouter.get('/', async (req, res) => {
   const lectures = (await getLectureRepository().find());
   lectures.forEach((lecture) => {
-    lecture.owner = censorUserMap(lecture.owner)
+    if (lecture.owner) {
+      lecture.owner = censorUserMap(lecture.owner);
+    }
   });
 
   res.json(lectures);

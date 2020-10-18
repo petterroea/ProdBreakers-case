@@ -13,6 +13,7 @@ import { Login } from '../pages/login';
 import { Register } from '../pages/register';
 import { VideoPlayerPage } from '../pages/player';
 import { ReadyStreamPage } from '../pages/stream';
+import { LecturesPage } from '../pages/lectures';
 import { NewStream } from '../pages/newStream';
 import { JoinStream } from '../pages/joinStream';
 
@@ -58,6 +59,7 @@ export const RouterComponent: React.FC = () => {
                                     not={<Redirect to="/" />}
                                     is={<JoinStream />}
                                 />
+                                <AuthenticatedRoute path="/lectures" not={<Redirect to="/" />} is={<LecturesPage />} />
                                 <AuthenticatedRoute
                                     exact
                                     path="/player/:uuid"
