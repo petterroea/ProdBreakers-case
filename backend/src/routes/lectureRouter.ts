@@ -55,13 +55,9 @@ lectureRouter.put('/', async (req, res) => {
       start,
       end,
     } = body;
-    await getLectureRepository().save({
-      owner,
-      name,
-      description,
-      start,
-      end
-    });
+    const newLecture = new Lecture(owner, name, description, start, end)
+    await getLectureRepository().save(newLecture);
+    res.json(newLecture)
     res.sendStatus(200);
   } catch (e) {
     res.sendStatus(500);

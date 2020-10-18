@@ -4,6 +4,11 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import { store } from './state/store';
+import { saveState } from './state/helpers/localstorage';
+
+store.subscribe(() => {
+    saveState(store.getState());
+});
 
 ReactDOM.render(
     <React.StrictMode>
