@@ -243,7 +243,10 @@ export const Controlls: React.FC<ControllsProps> = ({ videoRef, isStream, url, s
                         {activeChats.length !== 0 ? (
                             <CommentList progress={avgDuration}>
                                 {activeChats.map((chat) => {
-                                    return <DisplayComment message={chat} key={chat.uuid} />;
+                                    return <div>
+                                        <DisplayComment message={chat} key={chat.uuid} />
+                                        <button> Create Reply </button>
+                                    </div>;
                                 })}
                             </CommentList>
                         ) : null}
