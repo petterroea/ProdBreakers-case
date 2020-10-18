@@ -14,7 +14,13 @@ export interface Lecture {
 const Info = styled.p`
     color: #ccc;
 `;
+const List = styled.ul`
 
+`;
+
+const ListEntry = styled.li`
+    list-style-type: none;
+`;
 const StyleLink = styled(Link)`
     display: block;
     height: 5%;
@@ -47,10 +53,12 @@ const Column = styled.div`
 export const LectureEntry: React.FC<Lecture> = ({ name, uuid, isLive, onClick }) => {
     const link: string = '/player/' + uuid;
     return (
-        <LectureSelector onClick={onClick}>
-            <Info>name: {name}</Info>
-            <Info>{isLive ? "Presentation is Live now!" : "This is a recording." }</Info>
-        </LectureSelector>
+        <ListEntry>
+            <LectureSelector onClick={onClick}>
+                <Info>name: {name}</Info>
+                <Info>{isLive ? "Presentation is Live now!" : "This is a recording." }</Info>
+            </LectureSelector>
+        </ListEntry>
     );
 };
 
@@ -68,17 +76,19 @@ export const LectureList: React.FC<LectureListProps> = (props: LectureListProps)
         <Container>
             <Column>
                 <h2>Lectures</h2>
-                {props.lectures.map((lecture) => (
-                    <LectureEntry
-                        key={lecture.uuid}
-                        name={lecture.name}
-                        isLive={lecture.isLive}
-                        uuid={lecture.uuid}
-                        onClick={() => {
-                            onClick(lecture.uuid);
-                        }}
-                    />
-                ))}
+                <List>
+                    {props.lectures.map((lecture) => (
+                        <LectureEntry
+                            key={lecture.uuid}
+                            name={lecture.name}
+                            isLive={lecture.isLive}
+                            uuid={lecture.uuid}
+                            onClick={() => {
+                                onClick(lecture.uuid);
+                            }}
+                        />
+                    ))}
+                </List>
             </Column>
             {currentLecture && (
                 <Column>
