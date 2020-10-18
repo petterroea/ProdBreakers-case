@@ -12,7 +12,7 @@ export interface Lecture {
 }
 
 const Info = styled.p`
-    color: #ccc;
+    color: #222;
 `;
 const List = styled.ul`
 
