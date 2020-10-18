@@ -13,7 +13,6 @@ interface AuthenticatedRouteProps extends RouteProps {
 export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (props) => {
     const { is, not, ...rest } = props;
     const authSelector = useSelector((state: RootStateType) => state.authentication);
-    console.log(authSelector);
     // Check whether a component is a function or not. Execute and return if it is a function else only return
     const isFunction = (component: React.ReactNode) => {
         return component instanceof Function ? component() : component;

@@ -12,21 +12,6 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-const WrapperTwo = styled.div`
-    width: 100%;
-    display: flex;
-    height: 60%;
-    flex-direction: row;
-    align-items: stretch;
-    flex-wrap: wrap;
-`;
-
-interface ChatMessage {
-    user: string;
-    message: string;
-    uuid: string;
-}
-
 export const LecturesPage: React.FC = () => {
     const [lectures, setLectures] = React.useState([] as Lecture[]);
 
@@ -72,7 +57,6 @@ export const LecturesPage: React.FC = () => {
     }
     return (
         <Wrapper>
-            
             <LectureList lectures={lectures} />
         </Wrapper>
     );

@@ -6,7 +6,7 @@ import { RootStateType } from '../../state/reducers';
 
 const MessageList = (props: any) => {
     const currentLecture: string = props.currentLecture;
-    const [messages, setMessages] = useState(null as any[] | null);
+    const [messages, setMessages] = useState([]);
 
     const authSelector = useSelector((state: RootStateType) => state.authentication);
     const token: string | undefined = authSelector.user?.token;
@@ -19,6 +19,7 @@ const MessageList = (props: any) => {
                 }, // technically not necessary right now, but we might change that
             });
             const msgs = await res.json();
+            console.log(msgs);
             setMessages(msgs);
         };
         if (currentLecture) {
