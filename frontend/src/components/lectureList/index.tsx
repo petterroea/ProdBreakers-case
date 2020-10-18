@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
 import MessageList from '../messageList';
 
@@ -18,22 +17,22 @@ const Info = styled.p`
 
 const StyleLink = styled(Link)`
     display: block;
-    height:5%;
+    height: 5%;
 `;
 
 const LectureSelector = styled.button`
     display: block;
     background-color: Transparent;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     border: none;
-    cursor:pointer;
+    cursor: pointer;
     overflow: hidden;
-    outline:none;
+    outline: none;
 `;
 
 const Container = styled.div`
     height: 60%;
-  `;
+`;
 
 const Column = styled.div`
     width: 500px;
@@ -43,7 +42,7 @@ const Column = styled.div`
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin-right: 10px;
     float: left;
-  `;
+`;
 
 export const LectureEntry: React.FC<Lecture> = ({ name, uuid, isLive, onClick }) => {
     const link: string = '/player/' + uuid;
@@ -83,9 +82,9 @@ export const LectureList: React.FC<LectureListProps> = (props: LectureListProps)
             </Column>
             {currentLecture && (
                 <Column>
-                        <h2>{currentLecture}</h2>
-                        <StyleLink to={'/player/' + currentLecture} >Link to Stream</StyleLink>
-                        <MessageList lecture={currentLecture} />
+                    <h2>{currentLecture}</h2>
+                    <StyleLink to={'/player/' + currentLecture}>Link to Stream</StyleLink>
+                    <MessageList lecture={currentLecture} />
                 </Column>
             )}
         </Container>

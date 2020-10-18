@@ -1,17 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { ControllerPaus } from '@styled-icons/entypo/ControllerPaus';
 import { ControllerPlay } from '@styled-icons/entypo/ControllerPlay';
-import { historyObject as history } from '../../router/historyObject';
 import { Comment } from '@styled-icons/boxicons-regular/Comment';
 
-import socketIOClient from 'socket.io-client';
-
-import { ChatMessage, Recording } from './types';
+import { ChatMessage } from './types';
 import { DisplayComment } from '../displayComment';
 
 const Wrapper = styled.div`

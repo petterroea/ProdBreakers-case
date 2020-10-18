@@ -1,16 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { User } from '@styled-icons/fa-solid/User';
-import { UnlockAlt } from '@styled-icons/fa-solid/UnlockAlt';
-import { historyObject as history } from '../../router/historyObject';
 import { Controlls } from './Controlls';
 import videojs, { VideoJsPlayer } from 'video.js';
-
-import socketIOClient from 'socket.io-client';
 
 import { ChatMessage, Recording, Stream } from './types';
 
@@ -20,10 +11,6 @@ const Wrapper = styled.div`
 
 const Video = styled.video`
     width: 500px;
-`;
-
-const Slider = styled.input`
-    width: 100%;
 `;
 
 interface VideoPlayerProps {
